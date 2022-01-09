@@ -2,7 +2,7 @@
 using System;
 using System.Collections;
 
-namespace BlazorApp
+namespace BlazorApp.Services
 {
     public class ServiceContainer
     {

@@ -45,6 +45,7 @@ namespace BlazorApp
             {
                 endpoints.MapBlazorHub();
                 endpoints.MapFallbackToPage("/_Host");
+                endpoints.MapHub<ChatHub>(ChatHub.HUB_URL);
             });
         }
 

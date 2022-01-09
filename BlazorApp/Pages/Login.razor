@@ -1,0 +1,88 @@
+﻿@layout LoginLayout
+
+@page "/"
+
+<div class="card">
+
+    <p>Durum : 
+        @if (IsConnected)
+        {
+            <p> Bağlısınız </p>
+        }
+        else
+        {
+            <p> Bağlı Değilsiniz </p>
+        }
+    </p>
+
+    <h4 class="card-header">Login</h4>
+    <div class="card-body">
+        <EditForm Model="@loginModel" OnValidSubmit="ConnectServer">
+            <div class="form-group">
+                <label>Username</label>
+                <InputText @bind-Value="@loginModel.Name" class="form-control" />
+                <ValidationMessage For="@(() => loginModel.Name)" />
+            </div>
+            <div class="form-group">
+                <label>Password</label>
+                <InputText @bind-Value="@loginModel.Surname" type="password" class="form-control" />
+                <ValidationMessage For="@(() => loginModel.Surname)" />
+            </div>
+            <button class="btn btn-primary">
+                Login
+            </button>
+
+            @if (LoginService.User != null)
+            {
+                <p> Oturum Açan Kullanıcı : @LoginService.User.FullName </p>
+            }
+        </EditForm>
+
+        <button class="btn btn-primary" @onclick="() => ConnectTestServer() ">
+            Test
+        </button>
+
+    </div>
+</div>
+
+@code{
+    LoginModel loginModel = new LoginModel();
+
+    private void ConnectServer()
+    {
+        string hubUrl = NavigationManager.BaseUri.TrimEnd('/') + ChatHub.HUB_URL;
+        try
+        {
+            LoginService.Login(loginModel, hubUrl);
+            StateHasChanged();
+        }
+        catch (Exception e)
+        {
+            AlertService.ShowErrorAlert(e.Message);
+            StateHasChanged();
+        }
+    }
+
+    private void ConnectTestServer()
+    {
+
+    }
+
+    [Inject]
+    public NavigationManager NavigationManager { get; set; }
+
+    [Inject]
+    public IAlertService AlertService { get; set; }
+
+    [Inject]
+    public ILoginService LoginService { get; set; }
+
+
+    private bool IsConnected
+    {
+        get
+        {
+            return LoginService.User.IsConnect
+            }
+    }
+}
