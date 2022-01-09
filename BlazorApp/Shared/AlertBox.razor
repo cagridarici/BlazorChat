@@ -1,0 +1,58 @@
+﻿@inject IAlertService AlertService
+@implements IDisposable
+
+@foreach (var alert in _Alerts)
+{
+    <div class="alert alert-dismissible alert-@alert.ToClassName mt-4 container @alert.GetFadeEffect()" role="alert">
+        <a class="close" @onclick="@(() => RemoveAlert(alert))">&times;</a>
+        <strong>@alert.Type.ToString()</strong>
+        <span>
+            @alert.Message
+        </span>
+    </div>
+}
+
+
+@code
+{
+    List<Alert> _Alerts = new List<Alert>();
+
+    protected override void OnInitialized()
+    {
+        AlertService.OnAlert += OnAlertByService;
+    }
+
+    public async void OnAlertByService(AlertEventArgs e)
+    {
+        Alert alert = e.GetAlert;
+        _Alerts.Add(alert);
+        if (alert.AutoClose)
+        {
+            await Task.Delay(alert.CloseDelay);
+            RemoveAlert(alert);
+        }
+        StateHasChanged();
+    }
+
+    private async void RemoveAlert (Alert alert)
+    {
+        int index = GetIndexFromList(alert);
+        if (index != -1)
+        {
+            alert.FadeEffect = true;
+            await Task.Delay(500); 
+            _Alerts.RemoveAt(index);
+        }
+        StateHasChanged();
+    }
+
+    private int GetIndexFromList(Alert alert)
+    {
+        return _Alerts.FindIndex(i => i.Id == alert.Id);
+    }
+
+    public void Dispose()
+    {
+        AlertService.OnAlert -= OnAlertByService;
+    }
+}
