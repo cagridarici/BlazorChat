@@ -17,7 +17,7 @@ namespace BlazorApp.Services
 
         public LoginService()
         {
-
+            _HubService = ServiceContainer.Instance.GetServiceInstance(typeof(IHubService)) as HubService;
         }
 
         public async void Login(LoginModel model, string hubUrl)
