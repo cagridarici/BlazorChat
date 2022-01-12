@@ -16,10 +16,10 @@ namespace BlazorApp
             return base.OnConnectedAsync();
         }
 
-        [HubMethodName(Commands.ConnectClient)]
+        [HubMethodName(Commands.CONNECT_CLIENT)]
         public void ConnectClient(User user)
         {
-            Clients.All.SendAsync("OnConnectedHub", this.Context.ConnectionId);
+            Clients.Caller.SendAsync(Commands.GET_CONNECTION_ID, this.Context.ConnectionId);
         }
     }
 }

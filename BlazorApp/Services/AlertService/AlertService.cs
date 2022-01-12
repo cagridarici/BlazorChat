@@ -35,7 +35,7 @@ namespace BlazorApp.Services
         /// <param name="message"></param>
         public void ShowErrorAlert(string message)
         {
-            ShowAlert(new AlertEventArgs(new Alert(AlertType.Error, message)));
+            ShowAlert(new AlertEventArgs(new Alert(AlertType.Danger, message)));
         }
 
         /// <summary>

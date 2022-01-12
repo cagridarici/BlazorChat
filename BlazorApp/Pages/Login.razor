@@ -2,33 +2,32 @@
 
 @page "/"
 
-<div class="card">
 
-    <p>Durum : 
-        @if (IsConnected)
+<div class="get-started" id="login-screen">
+    <p>
+        <span class="material-icons" id="login-logo">
+            maps_ugc
+        </span>
+        Blazor <span class="login-p-subtitle">Chat</span>
+
+    </p>
+
+    <EditForm class="login-frm" Model="@loginModel" OnValidSubmit="ConnectServer">
+        <DataAnnotationsValidator />
+
+        @if (ShowConnectingText)
         {
-            <p> Bağlısınız </p>
+            <p>Sunucuya Bağlanılıyor Lütfen Bekleyiniz...</p>
+            <img src="img/spinner-icon-gif-24.jpg" />
         }
         else
         {
-            <p> Bağlı Değilsiniz </p>
-        }
-    </p>
+            <InputText @bind-Value="@loginModel.Name" type="text" id="email" class="login-form" placeholder="Name" />
+            <ValidationMessage For="@(() => loginModel.Name)" />
+            <InputText @bind-Value="@loginModel.Surname" type="password" class="login-form" placeholder="Surname" />
+            <ValidationMessage For="@(() => loginModel.Surname)" />
 
-    <h4 class="card-header">Login</h4>
-    <div class="card-body">
-        <EditForm Model="@loginModel" OnValidSubmit="ConnectServer">
-            <div class="form-group">
-                <label>Username</label>
-                <InputText @bind-Value="@loginModel.Name" class="form-control" />
-                <ValidationMessage For="@(() => loginModel.Name)" />
-            </div>
-            <div class="form-group">
-                <label>Password</label>
-                <InputText @bind-Value="@loginModel.Surname" type="password" class="form-control" />
-                <ValidationMessage For="@(() => loginModel.Surname)" />
-            </div>
-            <button class="btn btn-primary">
+            <button class="login-btn">
                 Login
             </button>
 
@@ -36,24 +35,28 @@
             {
                 <p> Oturum Açan Kullanıcı : @LoginService.User.FullName </p>
             }
-        </EditForm>
+        }
 
-        <button class="btn btn-primary" @onclick="() => ConnectTestServer() ">
-            Test
-        </button>
 
-    </div>
+    </EditForm>
+
+    <AlertBox>
+
+    </AlertBox>
 </div>
+
 
 @code{
     LoginModel loginModel = new LoginModel();
 
-    private void ConnectServer()
+    private async Task ConnectServer()
     {
         string hubUrl = NavigationManager.BaseUri.TrimEnd('/') + ChatHub.HUB_URL;
         try
         {
-            LoginService.Login(loginModel, hubUrl);
+            ShowConnectingText = true;
+            await Task.Delay(3000);
+            await LoginService.Login(loginModel, hubUrl);
             StateHasChanged();
         }
         catch (Exception e)
@@ -82,7 +85,16 @@
     {
         get
         {
-            return LoginService.User.IsConnect;
+            if (LoginService.User == null)
+                return false;
+            else
+                return LoginService.User.IsConnect;
         }
+    }
+
+    private bool ShowConnectingText
+    {
+        get;
+        set;
     }
 }

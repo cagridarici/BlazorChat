@@ -10,7 +10,7 @@ namespace BlazorApp.Services
 {
     public interface ILoginService : IService
     {
-        void Login(LoginModel user, string hubUrl);
+        Task Login(LoginModel user, string hubUrl);
         void LogOut();
         User User { get; }
     }

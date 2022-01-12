@@ -7,9 +7,11 @@ namespace BlazorApp
 {
     public class Commands
     {
-        public const string ConnectSignalR = "CommandConnectSignalR";
-        public const string GetConnectionId = "CommandGetConnectionId";
-        public const string ConnectClient = "CommandConnectClient";
-        public const string DisconnectClient = "CommandDisconnectClient";
+        public const string CONNECT_SIGNALR_HUB = "CommandConnectSignalR";
+        public const string GET_CONNECTION_ID = "CommandGetConnectionId";
+        public const string CONNECT_CLIENT = "CommandConnectClient";
+        public const string DISCONNECT_CLIENT = "CommandDisconnectClient";
+        public const string SEND_HUB_RESULT = "CommandSendHubResult";
+
     }
 }

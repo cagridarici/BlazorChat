@@ -46,12 +46,13 @@ namespace BlazorApp.Services
         { 
             get { return _AutoClose; } 
         }
+
         public int CloseDelay     
         { 
             get { return _CloseDelay; } 
         }
         
-        public string ToClassName 
+        public string GetClassName 
         { 
             get { return _Type.ToString().ToLower(); } 
         }
@@ -61,20 +62,13 @@ namespace BlazorApp.Services
             get { return _FadeEffect; } 
             set { _FadeEffect = value; } 
         }
-
-        public string GetFadeEffect()
-        {
-            if (_FadeEffect)
-                return "fade";
-            return string.Empty;
-        }
     }
 
     public enum AlertType
     {
         None,
         Success,
-        Error,
+        Danger,
         Info,
         Warning
     }

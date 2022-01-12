@@ -27,20 +27,15 @@ namespace BlazorApp.Services
             try
             {
                 _HubConnection = new HubConnectionBuilder().WithUrl(hubUrl).Build();
-                RegisterMethods();
                 await _HubConnection.StartAsync();
                 _IsConnected = true;
+                RegisterMethods();
             }
             catch (Exception e)
             {
                 _IsConnected = false;
                 throw new Exception(string.Format("SignalR Hub'ı ile bağlantı kurulamadı. Hata Detayı : {0} ", e.Message));
             }
-        }
-
-        public void DisconnectHub()
-        {
-
         }
 
         public async Task InvokeAsync(string commandName, object obj)
@@ -55,7 +50,7 @@ namespace BlazorApp.Services
         {
             if (!IsConnected)
                 throw new Exception("Hub Servisi SignalR Hub'ına Bağlı Değil ! ");
-            _HubConnection.On<string>(Commands.GetConnectionId, this.GetConnectionId);
+            _HubConnection.On<string>(Commands.GET_CONNECTION_ID, this.GetConnectionId);
         }
 
         /// <summary>
@@ -71,6 +66,18 @@ namespace BlazorApp.Services
             }
         }
 
+        public async Task DisconnectHub()
+        {
+            await _HubConnection.DisposeAsync();
+            _HubConnection = null;
+            _IsConnected = false;
+        }
+
+        public string GetConnectionId()
+        {
+            return _ConnectionId;
+        }
+
         public HubConnection HubConnection
         {
             get { return _HubConnection; }
@@ -79,11 +86,6 @@ namespace BlazorApp.Services
         public bool IsConnected
         {
             get { return _IsConnected; }
-        }
-
-        public string ConnectionId
-        {
-            get { return _ConnectionId; }
         }
     }
 }

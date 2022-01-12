@@ -18,27 +18,27 @@ namespace BlazorApp.Services
         public LoginService()
         {
             _HubService = ServiceContainer.Instance.GetServiceInstance(typeof(IHubService)) as HubService;
+            
+            RegisterMethods();
         }
 
-        public async void Login(LoginModel model, string hubUrl)
+        public async Task Login(LoginModel model, string hubUrl)
         {
             try
             {
-                await HubService.ConnectHub(hubUrl);
+                await _HubService.ConnectHub(hubUrl);
 
-                if (HubService.IsConnected)
+                if (_HubService.IsConnected)
                 {
                     User = new User();
                     User.Name = model.Name;
                     User.Surname = model.Surname;
-                    //User.ImageUrl = model.ImageUrl;
 
-                    await HubService.InvokeAsync(Commands.ConnectClient, User);
+                    await _HubService.InvokeAsync(Commands.CONNECT_CLIENT, User);
 
-                    User.ConnectionId = HubService.ConnectionId;
+                    User.ConnectionId = _HubService.GetConnectionId();
                     User.ConnectedDate = DateTime.Now;
-                    if (User.ConnectionId != null)
-                        User.IsConnect = true;
+                    User.IsConnect = true;
                 }
                 else
                 {
@@ -57,12 +57,9 @@ namespace BlazorApp.Services
 
         }
 
-        private HubService HubService
+        private void RegisterMethods()
         {
-            get
-            {
-                return _HubService;
-            }
+            return;
         }
 
         public User User

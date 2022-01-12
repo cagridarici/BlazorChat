@@ -11,7 +11,7 @@ namespace BlazorApp.Services
     public interface IHubService : IService
     {
         Task ConnectHub(string hubUrl);
-        void DisconnectHub();
+        Task DisconnectHub();
         Task InvokeAsync(string commandName, object obj);
         HubConnection HubConnection { get; }
     }
