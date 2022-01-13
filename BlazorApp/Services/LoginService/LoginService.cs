@@ -78,6 +78,7 @@ namespace BlazorApp.Services
             return;
         }
 
+
         public User User
         {
             get;

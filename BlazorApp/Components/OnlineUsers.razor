@@ -21,6 +21,9 @@
 
                 @foreach (User item in ChatUsers)
                 {
+                    if (LoginService.User.ConnectionId == item.ConnectionId) // Mine :)
+                        continue;
+
                     <li class="contact-info" id="new-message">
 
                         <div class="contact-profile-pic-bckg">
@@ -52,4 +55,7 @@
 @code {
     [Parameter]
     public List<User> ChatUsers { get; set; }
+
+    [Inject]
+    ILoginService LoginService { get; set; }
 }
