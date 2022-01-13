@@ -12,37 +12,36 @@
 
     </p>
 
-    <EditForm class="login-frm" Model="@loginModel" OnValidSubmit="ConnectServer">
-        <DataAnnotationsValidator />
 
-        @if (ShowConnectingText)
+    @if (IsConnected)
+    {
+        <p> Sunucuya Başarıyla Bağlandınız... : @LoginService.User.FullName </p>
+    }
+    else
+    {
+        if (ShowConnectingText)
         {
             <p>Sunucuya Bağlanılıyor Lütfen Bekleyiniz...</p>
             <img src="img/spinner-icon-gif-24.jpg" />
         }
         else
         {
-            <InputText @bind-Value="@loginModel.Name" type="text" id="email" class="login-form" placeholder="Name" />
-            <ValidationMessage For="@(() => loginModel.Name)" />
-            <InputText @bind-Value="@loginModel.Surname" type="password" class="login-form" placeholder="Surname" />
-            <ValidationMessage For="@(() => loginModel.Surname)" />
+            <EditForm class="login-frm" Model="@loginModel" OnValidSubmit="ConnectServer">
+                <DataAnnotationsValidator />
 
-            <button class="login-btn">
-                Login
-            </button>
+                <InputText @bind-Value="@loginModel.Name" type="text" id="email" class="login-form" placeholder="Name" />
+                <ValidationMessage For="@(() => loginModel.Name)" />
+                <InputText @bind-Value="@loginModel.Surname" type="password" class="login-form" placeholder="Surname" />
+                <ValidationMessage For="@(() => loginModel.Surname)" />
 
-            @if (LoginService.User != null)
-            {
-                <p> Oturum Açan Kullanıcı : @LoginService.User.FullName </p>
-            }
+                <button class="login-btn">
+                    Login
+                </button>
+
+            </EditForm>
         }
-
-
-    </EditForm>
-
-    <AlertBox>
-
-    </AlertBox>
+    }
+    <AlertBox />
 </div>
 
 
@@ -55,8 +54,11 @@
         try
         {
             ShowConnectingText = true;
+
             await Task.Delay(3000);
             await LoginService.Login(loginModel, hubUrl);
+
+            ShowConnectingText = false;
             StateHasChanged();
         }
         catch (Exception e)
