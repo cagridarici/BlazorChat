@@ -42,31 +42,3 @@
 
 
 </div>
-@code {
-
-    private void ChangeUserStatu(string toggleStatu)
-    {
-        if (toggleStatu == "toggle_on")
-        {
-            LoginService.ChangeStatus(UserStatus.Offline);
-        }
-        else if (toggleStatu == "toggle_off")
-        {
-            LoginService.ChangeStatus(UserStatus.Online);
-        }
-    }
-
-    [Inject]
-    ILoginService LoginService { get; set; }
-
-    private User LoggedUser
-    {
-        get
-        {
-            if (LoginService == null)
-                return null;
-            return LoginService.User;
-        }
-    }
-
-}
