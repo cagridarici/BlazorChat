@@ -12,6 +12,7 @@ namespace BlazorApp.Services
     {
         public event UserEventHandler OnConnectedUser = null;
         public event UserEventHandler OnDisconnectedUser = null;
+        public event UserEventHandler OnUserChangedStatus = null; 
 
         HubService _HubService = null;
 
@@ -38,6 +39,7 @@ namespace BlazorApp.Services
 
                     User.ConnectionId = _HubService.GetConnectionId();
                     User.ConnectedDate = DateTime.Now;
+                    User.UserStatus = UserStatus.Online;
                     User.IsConnect = true;
                 }
                 else
@@ -55,6 +57,15 @@ namespace BlazorApp.Services
         public void LogOut()
         {
 
+        }
+
+        public void ChangeStatus(UserStatus newStatus)
+        {
+            User.UserStatus = newStatus;
+            if (OnUserChangedStatus != null)
+            {
+                OnUserChangedStatus(); // User'ın statüsü değiştiği için ChatUser listesindeki User'ı güncelle.
+            }
         }
 
         private void RegisterMethods()

@@ -13,6 +13,7 @@ namespace BlazorApp.Services
         string _ImageUrl = string.Empty;
         DateTime _ConnectedDate = DateTime.MinValue;
         bool _IsConnect = false;
+        UserStatus _Status = UserStatus.Offline;
 
         public string ConnectionId
         {
@@ -54,5 +55,19 @@ namespace BlazorApp.Services
             get { return _ConnectedDate; }
             set { _ConnectedDate = value; }
         }
+
+        public UserStatus UserStatus
+        {
+            get { return _Status; }
+            set { _Status = value; }
+        }
+    }
+
+    public enum UserStatus
+    {
+        None,
+        Offline,
+        Online,
+        Away
     }
 }

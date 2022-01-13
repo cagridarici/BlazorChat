@@ -1,0 +1,86 @@
+﻿<nav class="profile-nav">
+    <!-- Navbar da esquerda, contém os perfis do usuário e de seus contatos/conversas -->
+
+
+    <UserStatu />
+
+
+    <div class="user-conversations">
+        <!-- Área de conversas com contatos do usuário -->
+
+        <div class="conversations-header">
+            <p>
+                Conversas
+            </p>
+
+        </div>
+
+        <div class="conversations-main">
+            <!--Todos as conversas -->
+
+
+            <ul class="conversations-main-list">
+                <!--Lista de conversas-->
+
+                <li class="contact-info" id="contact-selected">
+
+                    <div class="contact-profile-pic-bckg">
+
+                        <div class="contact-profile-pic"></div>
+
+                    </div>
+                    <div class="contact-text-area">
+                        <p class="contact-name">
+                            Chat Plus
+                        </p>
+                        <p class="contact-message">
+                            Olá! 😀😀 Esta é uma interface...
+                        </p>
+                    </div>
+
+
+
+                </li>
+
+                <li class="contact-info" id="new-message">
+
+                    <div class="contact-profile-pic-bckg">
+
+                        <div class="contact-profile-pic"></div>
+
+                    </div>
+                    <div class="contact-text-area">
+                        <p class="contact-name">
+                            Contato 1
+                        </p>
+                        <p class="contact-message">
+                            Mensagem nova!
+                        </p>
+                    </div>
+                    <div class="conversation-notification-bckg">
+                        <div class="conversation-notification">
+                            8
+                        </div>
+                    </div>
+
+
+                </li>
+
+            </ul>
+
+        </div>
+
+    </div>
+</nav>
+
+@code {
+    //ChatUsers[] students { get; set; }
+    //protected override async Task OnInitializedAsync()
+    //{
+    //    await LoadStudent();
+    //}
+    //async Task LoadStudent()
+    //{
+    //    students = await Http.GetJsonAsync<Student[]>("api/Student");
+    //}
+}

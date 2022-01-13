@@ -12,6 +12,7 @@ namespace BlazorApp.Services
     {
         Task Login(LoginModel user, string hubUrl);
         void LogOut();
+        void ChangeStatus(UserStatus status);
         User User { get; }
     }
 }

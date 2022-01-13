@@ -1,0 +1,72 @@
+﻿<div class="profile-nav-header">
+    <p>
+
+        <span class="material-icons" id="logo">
+            maps_ugc
+        </span>
+        Blazor <span class="p-subtitle">Chat</span>
+
+    </p>
+</div>
+
+
+<div class="user-profile">
+    <div class="user-profile-img">
+        <span class="material-icons" id="change-profile-pic">
+            photo_camera
+        </span>
+    </div>
+
+    <p class="user-profile-name" id="user-name">
+
+        @LoggedUser.FullName
+
+    </p>
+    <p class="user-connection">
+
+        @{
+            string toggleStatu = LoggedUser.UserStatus == UserStatus.Online ? "toggle_on" : "toggle_off";
+            string color = LoggedUser.UserStatus == UserStatus.Online ? "green" : "gray";
+
+            <span class="material-icons" id="user-connection-icon" style="color:@color" @onclick="() => ChangeUserStatu(toggleStatu)">
+                @toggleStatu
+            </span>
+
+            <span id="user-profile-name">
+                @LoggedUser.UserStatus.ToString()
+            </span>
+        }
+
+    </p>
+
+
+
+</div>
+@code {
+
+    private void ChangeUserStatu(string toggleStatu)
+    {
+        if (toggleStatu == "toggle_on")
+        {
+            LoginService.ChangeStatus(UserStatus.Offline);
+        }
+        else if (toggleStatu == "toggle_off")
+        {
+            LoginService.ChangeStatus(UserStatus.Online);
+        }
+    }
+
+    [Inject]
+    ILoginService LoginService { get; set; }
+
+    private User LoggedUser
+    {
+        get
+        {
+            if (LoginService == null)
+                return null;
+            return LoginService.User;
+        }
+    }
+
+}

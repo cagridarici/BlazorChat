@@ -12,16 +12,15 @@
 
     </p>
 
-
     @if (IsConnected)
     {
-        <p> Sunucuya Başarıyla Bağlandınız... : @LoginService.User.FullName </p>
+        // Remove
     }
     else
     {
         if (ShowConnectingText)
         {
-            <p>Sunucuya Bağlanılıyor Lütfen Bekleyiniz...</p>
+            <p class="text-center">Sunucuya Bağlanılıyor Lütfen Bekleyiniz...</p>
             <img src="img/spinner-icon-gif-24.jpg" />
         }
         else
@@ -60,6 +59,8 @@
 
             ShowConnectingText = false;
             StateHasChanged();
+
+            NavigationManager.NavigateTo("/chat");
         }
         catch (Exception e)
         {
