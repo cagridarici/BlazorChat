@@ -28,6 +28,7 @@ namespace BlazorApp
             services.AddScoped<IAlertService, AlertService>();
             services.AddScoped<IHubService, HubService>();
             services.AddScoped<ILoginService, LoginService>();
+            services.AddScoped<IChatService, ChatService>();
 
 
             // Register all types and instances to service container 

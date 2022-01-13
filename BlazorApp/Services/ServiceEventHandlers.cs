@@ -5,7 +5,8 @@ using System.Threading.Tasks;
 
 namespace BlazorApp.Services
 {
-    public delegate void UserEventHandler();
+    public delegate void EmptyEventHander();
+    public delegate void UserEventHandler(UserEventArgs e);
     public delegate void AlertServiceEventHandler(AlertEventArgs e);
     public delegate void HubConnectionEventHandler(string connectionId);
 }

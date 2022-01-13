@@ -5,13 +5,45 @@
 
 <div class="background-wrapper" id="main">
 
-    <OnlineUsers />
+    <OnlineUsers ChatUsers="this.ChatUsers" />
 
     <ChatPanel />
 
-
 </div>
 
-@code{
+@code{ 
 
+    protected override async Task OnInitializedAsync()
+    {
+        //ChatService.OnConnectedUser += OnConnectedUser;
+        //ChatService.OnDisconnectedUser += OnDisconnectedUser;
+        await ChatService.GetChatUsers();
+        ChatService.OnStatesChanged += UpdateState;
+    }
+
+    public void UpdateState()
+    {
+        StateHasChanged();
+    }
+
+    public void OnConnectedUser(UserEventArgs e)
+    {
+        StateHasChanged();
+    }
+
+    public void OnDisconnectedUser(UserEventArgs e)
+    {
+        StateHasChanged();
+    }
+
+    public List<User> ChatUsers
+    {
+        get
+        {
+            return ChatService.ChatUsers;
+        }
+    }
+
+    [Inject]
+    IChatService ChatService { get; set; }
 }

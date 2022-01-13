@@ -41,6 +41,11 @@ namespace BlazorApp.Services
                     User.ConnectedDate = DateTime.Now;
                     User.UserStatus = UserStatus.Online;
                     User.IsConnect = true;
+
+                    if (OnConnectedUser != null)
+                    {
+                        OnConnectedUser(new UserEventArgs(User));
+                    }
                 }
                 else
                 {
@@ -64,7 +69,7 @@ namespace BlazorApp.Services
             User.UserStatus = newStatus;
             if (OnUserChangedStatus != null)
             {
-                OnUserChangedStatus(); // User'ın statüsü değiştiği için ChatUser listesindeki User'ı güncelle.
+                OnUserChangedStatus(new UserEventArgs(User)); // User'ın statüsü değiştiği için ChatUser listesindeki User'ı güncelle.
             }
         }
 
