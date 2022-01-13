@@ -9,4 +9,5 @@ namespace BlazorApp.Services
     public delegate void UserEventHandler(UserEventArgs e);
     public delegate void AlertServiceEventHandler(AlertEventArgs e);
     public delegate void HubConnectionEventHandler(string connectionId);
+    public delegate void MessageEventHandler(MessageModel message);
 }

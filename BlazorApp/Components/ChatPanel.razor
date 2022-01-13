@@ -33,18 +33,18 @@
 
     <div class="chat-conversation-wrapper" id="chat-wrapper">
         <!-- Área das mensagens -->
-
-        @*@for (int i = 0; i < messages.Count; i++)
+        @for (int i = 0; i < _Messages.Count; i++)
         {
             <div class="contact-message-wrapper">
                 <div class="contact-message-box-style"></div>
                 <div class="contact-message-box">
                     <div class="contact-message-box-p">
-                        @messages[i];
+                        @_Messages[i].Message
                     </div>
+                    <span style="font-size:13px; color:darkgray">@_Messages[i].Sended.FullName</span>
                 </div>
             </div>
-        }*@
+        }
 
 
     </div>
@@ -66,10 +66,10 @@
         </p>
 
         <div class="chat-user-message-form-wrapper">
-            <input type="text" name="" id="user-message-form" placeholder="Mesajınız...">
+            <input type="text" name="" @bind-value="@_Message" id="user-message-form" placeholder="Mesajınız...">
         </div>
 
-        <span class="material-icons" id="send-message" onclick="sendMessage()">
+        <span class="material-icons" id="send-message" @onclick="@(() => SendMessage(_Message))">
             send
         </span>
         <div class="emojis-wrapper" id="emojis-wrapper">
@@ -95,11 +95,39 @@
 
 
 </main>
-@code {
+@code { 
+
+
+    List<MessageModel> _Messages = new List<MessageModel>();
+
+    string _Message = string.Empty;
+
+    protected override void OnInitialized()
+    {
+        ChatService.OnGetMessageEventHandler += GetMessage;
+        base.OnInitialized();
+    }
 
     private void UnusedFunction()
     {
         AlertService.ShowErrorAlert("Bu fonksiyon henüz kullanılamaz !");
+    }
+
+    private void GetMessage(MessageModel message)
+    {
+        _Messages.Add(message);
+    }
+
+    private void SendMessage(string message)
+    {
+        MessageModel messageModel = new MessageModel();
+        messageModel.Sended = LoginService.User;
+        messageModel.Message = message;
+
+        _Messages.Add(messageModel);
+        StateHasChanged();
+        ChatService.SendMessage(messageModel);
+        _Message = string.Empty;
     }
 
     //List<string> messages = new List<string>();
@@ -118,4 +146,10 @@
 
     [Inject]
     IAlertService AlertService { get; set; }
+
+    [Inject]
+    IChatService ChatService { get; set; }
+
+    [Inject]
+    ILoginService LoginService { get; set; }
 }

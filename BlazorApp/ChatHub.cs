@@ -37,5 +37,11 @@ namespace BlazorApp
         {
             Clients.All.SendAsync(Commands.GET_ON_CONNECTED_USER, user);
         }
+
+        [HubMethodName(Commands.SEND_MESSAGE)]
+        public void SendMessage(MessageModel model)
+        {
+            Clients.All.SendAsync(Commands.GET_MESSAGE, model);
+        }
     }
 }

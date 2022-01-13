@@ -9,6 +9,8 @@ namespace BlazorApp.Services
     {
         public event EmptyEventHander OnStatesChanged = null;
 
+        public event MessageEventHandler OnGetMessageEventHandler = null;
+
         List<User> _ChatUsers = null;
         HubService _HubService = null;
         bool _IsRegisterHubMethods = false;
@@ -30,12 +32,27 @@ namespace BlazorApp.Services
                 return;
             _HubService.RegisterCustomHubMethod<List<User>>(Commands.GET_CHAT_USERS, LoadChatUsers);
             _HubService.RegisterCustomHubMethod<User>(Commands.GET_ON_CONNECTED_USER, CommandGetOnConnectedUser);
+            _HubService.RegisterCustomHubMethod<MessageModel>(Commands.GET_MESSAGE, GetMessage);
         }
 
         public async Task GetChatUsers()
         {
             RegisterHubMethods();
             await _HubService.InvokeAsync(Commands.GET_CHAT_USERS);
+        }
+
+        public void GetMessage(MessageModel message)
+        {
+            if (OnGetMessageEventHandler != null)
+            {
+                OnGetMessageEventHandler(message);
+            }
+        }
+
+        public async Task SendMessage(MessageModel model)
+        {
+            RegisterHubMethods();
+            await _HubService.InvokeAsync(Commands.SEND_MESSAGE, model);
         }
 
         public void LoadChatUsers(List<User> chatUsers)

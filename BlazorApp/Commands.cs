@@ -16,6 +16,8 @@
         public const string GET_CHAT_USERS = "CommandGetChatUsers";
         public const string GET_ON_CONNECTED_USER = "CommandGetOnConnectedUser";
 
+        public const string GET_MESSAGE = "CommandGetMessage";
+        public const string SEND_MESSAGE = "CommandSendMessage";
 
         #endregion
 

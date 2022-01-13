@@ -10,10 +10,13 @@ namespace BlazorApp.Services
         //public event UserEventHandler OnConnectedUser;
         //public event UserEventHandler OnDisconnectedUser;
 
+        public event MessageEventHandler OnGetMessageEventHandler;
+
         public event EmptyEventHander OnStatesChanged;
 
         List<User> ChatUsers { get; }
         Task GetChatUsers();
         void LoadChatUsers(List<User> chatUsers);
+        Task SendMessage(MessageModel message);
     }
 }

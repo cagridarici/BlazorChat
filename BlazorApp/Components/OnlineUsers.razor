@@ -19,6 +19,31 @@
 
             <ul class="conversations-main-list">
 
+                <li class="contact-info" id="contact-selected">
+
+                    <div class="contact-profile-pic-bckg">
+
+                        <div class="contact-profile-pic"></div>
+                    </div>
+                    <div class="contact-text-area">
+                        <p class="contact-name">
+                            Blazor Chat Kanalı
+                        </p>
+                        <p class="contact-message">
+
+                        </p>
+                    </div>
+                    <div class="conversation-notification-bckg">
+                        <div class="conversation-channel">
+                            
+                        </div>
+                    </div>
+                </li>
+
+
+
+
+
                 @foreach (User item in ChatUsers)
                 {
                     if (LoginService.User.ConnectionId == item.ConnectionId) // Mine :)
@@ -40,7 +65,7 @@
                         </div>
                         <div class="conversation-notification-bckg">
                             <div class="conversation-notification">
-                                1
+                                
                             </div>
                         </div>
                     </li>
