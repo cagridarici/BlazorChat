@@ -25,7 +25,7 @@
     <p class="user-connection">
 
         @{
-            string toggleStatu = LoggedUser.UserStatus == UserStatus.Online ? "toggle_on" : "toggle_off";
+            string toggleStatu = LoggedUser.UserStatus == UserStatus.Online ? TOGGLE_ON : TOGGLE_OFF;
             string color = LoggedUser.UserStatus == UserStatus.Online ? "green" : "gray";
 
             <span class="material-icons" id="user-connection-icon" style="color:@color" @onclick="() => ChangeUserStatu(toggleStatu)">
@@ -44,13 +44,16 @@
 </div>
 @code {
 
+    const string TOGGLE_ON = "toggle_on";
+    const string TOGGLE_OFF = "toggle_off";
+
     private void ChangeUserStatu(string toggleStatu)
     {
-        if (toggleStatu == "toggle_on")
+        if (toggleStatu == TOGGLE_ON)
         {
             LoginService.ChangeStatus(UserStatus.Offline);
         }
-        else if (toggleStatu == "toggle_off")
+        else if (toggleStatu == TOGGLE_OFF)
         {
             LoginService.ChangeStatus(UserStatus.Online);
         }
