@@ -33,6 +33,19 @@ namespace BlazorApp.Services
             _HubService.RegisterCustomHubMethod<List<User>>(Commands.GET_CHAT_USERS, LoadChatUsers);
             _HubService.RegisterCustomHubMethod<User>(Commands.GET_ON_CONNECTED_USER, CommandGetOnConnectedUser);
             _HubService.RegisterCustomHubMethod<MessageModel>(Commands.GET_MESSAGE, GetMessage);
+            _HubService.RegisterCustomHubMethod<User>(Commands.SEND_CLIENT_TO_NEW_USER, GetChangedUser);
+        }
+
+        public void GetChangedUser(User user)
+        {
+            var userItem = ChatUsers.Where(x => x.ConnectionId == user.ConnectionId).FirstOrDefault();
+            if (userItem == null)
+                return;
+            userItem.UserStatus = user.UserStatus;
+            if (OnStatesChanged != null)
+            {
+                OnStatesChanged();
+            }
         }
 
         public async Task GetChatUsers()

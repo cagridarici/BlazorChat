@@ -34,13 +34,14 @@ namespace BlazorApp.Services
                     User = new User();
                     User.Name = model.Name;
                     User.Surname = model.Surname;
+                    User.UserStatus = UserStatus.Online;
+                    User.ConnectedDate = DateTime.Now;
+                    User.IsConnect = true;
 
                     await _HubService.InvokeAsync(Commands.CONNECT_CLIENT, User);
+                    User.IsConnect = true;
 
                     User.ConnectionId = _HubService.GetConnectionId();
-                    User.ConnectedDate = DateTime.Now;
-                    User.UserStatus = UserStatus.Online;
-                    User.IsConnect = true;
 
                     if (OnConnectedUser != null)
                     {
@@ -64,18 +65,24 @@ namespace BlazorApp.Services
 
         }
 
-        public void ChangeStatus(UserStatus newStatus)
+        public async Task ChangeStatus(UserStatus newStatus)
         {
             User.UserStatus = newStatus;
+            await _HubService.InvokeAsync(Commands.CHANGE_USER_PROPERTIES, User);
             if (OnUserChangedStatus != null)
             {
                 OnUserChangedStatus(new UserEventArgs(User)); // User'ın statüsü değiştiği için ChatUser listesindeki User'ı güncelle.
             }
         }
 
-        private void RegisterMethods()
+        public void RegisterMethods()
         {
-            return;
+
+        }
+
+        public void GetChangedUser(User user)
+        {
+
         }
 
 

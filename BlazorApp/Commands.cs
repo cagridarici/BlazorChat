@@ -8,6 +8,8 @@
         public const string GET_CONNECTION_ID = "CommandGetConnectionId";
         public const string CONNECT_CLIENT = "CommandConnectClient";
         public const string DISCONNECT_CLIENT = "CommandDisconnectClient";
+        public const string CHANGE_USER_PROPERTIES = "CommandChangeUserProperties";
+        public const string SEND_CLIENT_TO_NEW_USER = "CommandSendClientToNewUser";
 
         #endregion
 

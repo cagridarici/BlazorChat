@@ -22,6 +22,7 @@ namespace BlazorApp
         public void ConnectClient(User user)
         {
             user.ConnectionId = this.Context.ConnectionId;
+            user.IsConnect = true;
             OnlineUsers.Add(user);
             Clients.Caller.SendAsync(Commands.GET_CONNECTION_ID, this.Context.ConnectionId);
             SendOnConnectedUser(user);
@@ -42,6 +43,16 @@ namespace BlazorApp
         public void SendMessage(MessageModel model)
         {
             Clients.All.SendAsync(Commands.GET_MESSAGE, model);
+        }
+
+        [HubMethodName(Commands.CHANGE_USER_PROPERTIES)]
+        public void ChangeUserProperties(User user)
+        {
+            var changeItem = OnlineUsers.Where(x => x.ConnectionId == user.ConnectionId).FirstOrDefault();
+            if (changeItem == null)
+                return;
+            changeItem.UserStatus = user.UserStatus;
+            Clients.All.SendAsync(Commands.SEND_CLIENT_TO_NEW_USER, changeItem);
         }
     }
 }

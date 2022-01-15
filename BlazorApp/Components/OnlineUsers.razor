@@ -41,9 +41,6 @@
                 </li>
 
 
-
-
-
                 @foreach (User item in ChatUsers)
                 {
                     if (LoginService.User.ConnectionId == item.ConnectionId) // Mine :)
@@ -60,7 +57,7 @@
                                 @item.FullName
                             </p>
                             <p class="contact-message">
-                                buraya son mesaj gelecek...
+                                @item.UserStatus.ToString()
                             </p>
                         </div>
                         <div class="conversation-notification-bckg">
