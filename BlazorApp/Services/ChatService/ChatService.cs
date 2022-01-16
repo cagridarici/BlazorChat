@@ -30,19 +30,6 @@ namespace BlazorApp.Services
             if (_IsRegisterHubMethods)
                 return;
 
-            /* HubRequest ve HubResponse nesneleri olustur icerisine object turunde parametreler alabilsin param parameters[] object gibi Hub sunucusuna bu deger gonderilsin
-               Hub sunucusundanda HubResponse donsun client'da hubResponse alcak
-            
-                Client => HubRequest gondericek...
-                Server => HubResponse gondericek...
-
-
-                Client => HubResponse alacak
-                Server => HubRequest alacak 
-
-             */
-
-
             _HubService.RegisterCustomHubMethod<List<User>>(Commands.GET_CHAT_USERS, LoadChatUsers);
             _HubService.RegisterCustomHubMethod<User>(Commands.GET_ON_CONNECTED_USER, CommandGetOnConnectedUser);
             _HubService.RegisterCustomHubMethod<MessageModel>(Commands.GET_MESSAGE, GetMessage);

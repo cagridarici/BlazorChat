@@ -15,25 +15,25 @@
 
     protected override async Task OnInitializedAsync()
     {
-        //ChatService.OnConnectedUser += OnConnectedUser;
-        //ChatService.OnDisconnectedUser += OnDisconnectedUser;
+        ////ChatService.OnConnectedUser += OnConnectedUser;
+        ////ChatService.OnDisconnectedUser += OnDisconnectedUser;
         await ChatService.GetChatUsers();
         ChatService.OnStatesChanged += UpdateState;
     }
 
     public void UpdateState()
     {
-        StateHasChanged();
+        InvokeAsync(StateHasChanged);
     }
 
     public void OnConnectedUser(UserEventArgs e)
     {
-        StateHasChanged();
+        UpdateState();
     }
 
     public void OnDisconnectedUser(UserEventArgs e)
     {
-        StateHasChanged();
+        UpdateState();
     }
 
     public List<User> ChatUsers
