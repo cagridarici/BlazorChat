@@ -38,7 +38,7 @@ namespace BlazorApp.Services
                     User.ConnectedDate = DateTime.Now;
                     User.IsConnect = true;
 
-                    await _HubService.InvokeAsync(Commands.CONNECT_CLIENT, User);
+                    await _HubService.InvokeAsync(HubCommands.CONNECT_CLIENT, User);
                     User.IsConnect = true;
 
                     User.ConnectionId = _HubService.GetConnectionId();
@@ -68,7 +68,7 @@ namespace BlazorApp.Services
         public async Task ChangeStatus(UserStatus newStatus)
         {
             User.UserStatus = newStatus;
-            await _HubService.InvokeAsync(Commands.CHANGE_USER_PROPERTIES, User);
+            await _HubService.InvokeAsync(HubCommands.CHANGE_USER_STATUS, User);
             if (OnUserChangedStatus != null)
             {
                 OnUserChangedStatus(new UserEventArgs(User)); // User'ın statüsü değiştiği için ChatUser listesindeki User'ı güncelle.

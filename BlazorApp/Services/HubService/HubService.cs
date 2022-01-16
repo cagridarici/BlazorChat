@@ -57,7 +57,7 @@ namespace BlazorApp.Services
         {
             if (!IsConnected)
                 throw new Exception("Hub Servisi SignalR Hub'ına Bağlı Değil ! ");
-            _HubConnection.On<string>(Commands.GET_CONNECTION_ID, this.GetConnectionId);
+            _HubConnection.On<string>(ClientCommands.GET_CONNECTION_ID, this.GetConnectionId);
         }
 
         public void RegisterCustomHubMethod<Tobj>(string commandName, Action<Tobj> method)

@@ -30,10 +30,10 @@ namespace BlazorApp.Services
             if (_IsRegisterHubMethods)
                 return;
 
-            _HubService.RegisterCustomHubMethod<List<User>>(Commands.GET_CHAT_USERS, LoadChatUsers);
-            _HubService.RegisterCustomHubMethod<User>(Commands.GET_ON_CONNECTED_USER, CommandGetOnConnectedUser);
-            _HubService.RegisterCustomHubMethod<MessageModel>(Commands.GET_MESSAGE, GetMessage);
-            _HubService.RegisterCustomHubMethod<User>(Commands.SEND_CLIENT_TO_NEW_USER, GetChangedUser);
+            _HubService.RegisterCustomHubMethod<List<User>>(ClientCommands.GET_ONLINE_USERS, LoadChatUsers);
+            _HubService.RegisterCustomHubMethod<User>(ClientCommands.GET_LOGGED_USER, CommandGetOnConnectedUser);
+            _HubService.RegisterCustomHubMethod<MessageModel>(ClientCommands.GET_MESSAGE, GetMessage);
+            _HubService.RegisterCustomHubMethod<User>(ClientCommands.GET_CHANGED_USER_STATUS, GetChangedUser);
             _IsRegisterHubMethods = true;
         }
 
@@ -52,7 +52,7 @@ namespace BlazorApp.Services
         public async Task GetChatUsers()
         {
             RegisterHubMethods();
-            await _HubService.InvokeAsync(Commands.GET_CHAT_USERS);
+            await _HubService.InvokeAsync(HubCommands.SEND_ONLINE_USERS);
         }
 
         public void GetMessage(MessageModel message)
@@ -66,7 +66,7 @@ namespace BlazorApp.Services
         public async Task SendMessage(MessageModel model)
         {
             RegisterHubMethods();
-            await _HubService.InvokeAsync(Commands.SEND_MESSAGE, model);
+            await _HubService.InvokeAsync(HubCommands.SEND_MESSAGE, model);
         }
 
         public void LoadChatUsers(List<User> chatUsers)

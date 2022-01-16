@@ -49,7 +49,7 @@
 
     private async Task ConnectServer()
     {
-        string hubUrl = NavigationManager.BaseUri + ChatHub.HUB_URL;
+        string hubUrl = NavigationManager.BaseUri.TrimEnd('/') + ChatHub.HUB_URL;
         try
         {
             ShowConnectingText = true;
