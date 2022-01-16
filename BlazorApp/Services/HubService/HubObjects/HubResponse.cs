@@ -8,19 +8,6 @@ namespace BlazorApp.Services
 {
     public class HubResponse : IHubResponse
     {
-
-        /* HubRequest ve HubResponse nesneleri olustur icerisine object turunde parametreler alabilsin param parameters[] object gibi Hub sunucusuna bu deger gonderilsin
-           Hub sunucusundanda HubResponse donsun client'da hubResponse alcak
-
-            Client => HubRequest gondericek...
-            Server => HubResponse gondericek...
-
-
-            Client => HubResponse alacak
-            Server => HubRequest alacak 
-
-         */
-
         bool _IsSuccess = false;
         string _Message = null;
         ArrayList _Parameters = null;
