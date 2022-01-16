@@ -18,49 +18,56 @@ namespace BlazorApp.Services
             _Id = Guid.NewGuid();
         }
 
-        public Alert(AlertType type, string message, bool autoClose, int closeDelay)
+        public Alert(AlertType type, string message, int closeDelay)
         {
             _Type = type;
             _Message = message;
-            _AutoClose = autoClose;
-            _CloseDelay = closeDelay;
             _Id = Guid.NewGuid();
+            _CloseDelay = closeDelay;
         }
 
-        public Guid Id            
-        { 
-            get { return _Id; }  
+        public Alert(AlertType type, string message, bool autoClose)
+        {
+            _Type = type;
+            _Message = message;
+            _Id = Guid.NewGuid();
+            _AutoClose = autoClose;
         }
 
-        public AlertType Type     
-        { 
-            get { return _Type; } 
+        public Guid Id
+        {
+            get { return _Id; }
         }
 
-        public string Message     
-        { 
-            get { return _Message; } 
+        public AlertType Type
+        {
+            get { return _Type; }
         }
 
-        public bool AutoClose     
-        { 
-            get { return _AutoClose; } 
+        public string Message
+        {
+            get { return _Message; }
         }
 
-        public int CloseDelay     
-        { 
-            get { return _CloseDelay; } 
+        public bool AutoClose
+        {
+            get { return _AutoClose; }
         }
-        
-        public string GetClassName 
-        { 
-            get { return _Type.ToString().ToLower(); } 
+
+        public int CloseDelay
+        {
+            get { return _CloseDelay; }
         }
-        
-        public bool FadeEffect    
-        { 
-            get { return _FadeEffect; } 
-            set { _FadeEffect = value; } 
+
+        public string GetClassName
+        {
+            get { return _Type.ToString().ToLower(); }
+        }
+
+        public bool FadeEffect
+        {
+            get { return _FadeEffect; }
+            set { _FadeEffect = value; }
         }
     }
 

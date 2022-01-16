@@ -12,17 +12,16 @@
     </div>
 }
 
-
 @code
 {
     List<Alert> _Alerts = new List<Alert>();
 
     protected override void OnInitialized()
     {
-        AlertService.OnAlert += OnAlertByService;
+        AlertService.OnAlert += OnAlert;
     }
 
-    public async void OnAlertByService(AlertEventArgs e)
+    private async void OnAlert(AlertEventArgs e)
     {
         Alert alert = e.GetAlert;
         _Alerts.Add(alert);
@@ -34,7 +33,7 @@
         }
     }
 
-    private async void RemoveAlert (Alert alert)
+    private async void RemoveAlert(Alert alert)
     {
         int index = GetIndexFromList(alert);
         if (index != -1)
@@ -65,11 +64,11 @@
             case AlertType.None:
                 return string.Empty;
             case AlertType.Success:
-                return "Başarılı !";
+                return "Başarılı";
             case AlertType.Danger:
-                return "Dikkat !";
+                return "Dikkat";
             case AlertType.Info:
-                return "Bilgi !";
+                return "Bilgi";
             case AlertType.Warning:
                 return "Uyarı";
             default:
@@ -79,6 +78,6 @@
 
     public void Dispose()
     {
-        AlertService.OnAlert -= OnAlertByService;
+        AlertService.OnAlert -= OnAlert;
     }
 }

@@ -11,6 +11,9 @@ namespace BlazorApp.Services
             _Alert = alert;
         }
 
-        public Alert GetAlert { get { return _Alert; } }
+        public Alert GetAlert
+        {
+            get { return _Alert; }
+        }
     }
 }

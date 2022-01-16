@@ -8,7 +8,8 @@ namespace BlazorApp.Services
     public interface IAlertService : IService
     {
         event AlertServiceEventHandler OnAlert;
-        void ShowAlert(AlertType type, string message, bool autoClose, int closeDelay);
+        void ShowAlert(AlertType type, string message, int closeDelay);
+        void ShowAlert(AlertType type, string message, bool autoClose);
         void ShowSuccessAlert(string message);
         void ShowErrorAlert(string message);
         void ShowInfoAlert(string message);

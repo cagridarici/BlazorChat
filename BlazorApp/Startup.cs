@@ -64,7 +64,9 @@ namespace BlazorApp
                 foreach (var @interface in interfaces)
                 {
                     if (@interface == typeof(IService))
+                    {
                         serviceContainer.AddService(type, sp.GetService(type));
+                    }
                 }
             }
         }

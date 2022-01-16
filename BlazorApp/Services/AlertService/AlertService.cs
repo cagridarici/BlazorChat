@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Threading.Tasks;
 
 namespace BlazorApp.Services
 {
@@ -15,9 +12,18 @@ namespace BlazorApp.Services
         /// Show custom alert on the razor pages
         /// </summary>
         /// <param name="message"></param>
-        public void ShowAlert(AlertType type, string message, bool autoClose, int closeDelay)
+        public void ShowAlert(AlertType type, string message, int closeDelay)
         {
-            ShowAlert(new AlertEventArgs(new Alert(type, message, autoClose, closeDelay)));
+            ShowAlert(new AlertEventArgs(new Alert(type, message, closeDelay)));
+        }
+
+        /// <summary>
+        /// Show custom alert on the razor pages
+        /// </summary>
+        /// <param name="message"></param>
+        public void ShowAlert(AlertType type, string message, bool autoClose)
+        {
+            ShowAlert(new AlertEventArgs(new Alert(type, message, autoClose)));
         }
 
         /// <summary>
@@ -59,9 +65,7 @@ namespace BlazorApp.Services
         private void ShowAlert(AlertEventArgs e)
         {
             if (OnAlert != null)
-            {
                 OnAlert(e);
-            }
         }
     }
 }

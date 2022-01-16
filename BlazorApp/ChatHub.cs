@@ -11,48 +11,53 @@ namespace BlazorApp
     {
         public const string HUB_URL = "/ChatHub";
 
-        static List<User> OnlineUsers = new List<User>();
+        List<User> _OnlineUsers = null;
+
+        public ChatHub()
+        {
+            _OnlineUsers = new List<User>();
+        }
 
         public override Task OnConnectedAsync()
         {
             return base.OnConnectedAsync();
         }
 
-        [HubMethodName(Commands.CONNECT_CLIENT)]
+        [HubMethodName(HubCommands.CONNECT_CLIENT)]
         public void ConnectClient(User user)
         {
             user.ConnectionId = this.Context.ConnectionId;
             user.IsConnect = true;
-            OnlineUsers.Add(user);
-            Clients.Caller.SendAsync(Commands.GET_CONNECTION_ID, this.Context.ConnectionId);
-            SendOnConnectedUser(user);
+            _OnlineUsers.Add(user);
+            Clients.Caller.SendAsync(ClientCommands.GET_CONNECTION_ID, this.Context.ConnectionId);
+            SendConnectedUser(user);
         }
 
-        [HubMethodName(Commands.GET_CHAT_USERS)]
-        public void SendChatUsers()
+        [HubMethodName(HubCommands.SEND_ONLINE_USERS)]
+        public void SendOnlineUsers()
         {
-            Clients.Caller.SendAsync(Commands.GET_CHAT_USERS, OnlineUsers);
+            Clients.Caller.SendAsync(ClientCommands.GET_ONLINE_USERS, _OnlineUsers);
         }
 
-        public void SendOnConnectedUser(User user)
-        {
-            Clients.All.SendAsync(Commands.GET_ON_CONNECTED_USER, user);
-        }
-
-        [HubMethodName(Commands.SEND_MESSAGE)]
+        [HubMethodName(HubCommands.SEND_MESSAGE)]
         public void SendMessage(MessageModel model)
         {
-            Clients.All.SendAsync(Commands.GET_MESSAGE, model);
+            Clients.All.SendAsync(ClientCommands.GET_MESSAGE, model);
         }
 
-        [HubMethodName(Commands.CHANGE_USER_PROPERTIES)]
+        [HubMethodName(HubCommands.CHANGE_USER_STATUS)]
         public void ChangeUserProperties(User user)
         {
-            var changeItem = OnlineUsers.Where(x => x.ConnectionId == user.ConnectionId).FirstOrDefault();
+            var changeItem = _OnlineUsers.Where(x => x.ConnectionId == user.ConnectionId).FirstOrDefault();
             if (changeItem == null)
                 return;
             changeItem.UserStatus = user.UserStatus;
-            Clients.All.SendAsync(Commands.SEND_CLIENT_TO_NEW_USER, changeItem);
+            Clients.All.SendAsync(ClientCommands.GET_CHANGED_USER_STATUS, changeItem);
+        }
+
+        private void SendConnectedUser(User user)
+        {
+            Clients.All.SendAsync(ClientCommands.GET_LOGGED_USER, user);
         }
     }
 }

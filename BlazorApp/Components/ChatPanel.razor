@@ -1,8 +1,6 @@
 ﻿<main class="chat-main-wrapper">
-    <!-- Área do chat -->
 
     <div class="chat-header">
-        <!--Informações sobre o contato selecionado para troca de mensagens -->
 
         <div class="chat-header-contact-master">
             <div class="chat-header-contact-profile-pic"></div>
@@ -17,22 +15,17 @@
 
         </div>
         <div class="chat-header-contact-actions">
-
             <span class="material-icons" @onclick="() => UnusedFunction()" id="video-call">
                 videocam
             </span>
             <span class="material-icons" @onclick="() => UnusedFunction()" id="chat-contact-messages-options">
                 more_vert
             </span>
-
         </div>
-
-
-
     </div>
 
     <div class="chat-conversation-wrapper" id="chat-wrapper">
-        <!-- Área das mensagens -->
+
         @for (int i = 0; i < _Messages.Count; i++)
         {
             <div class="contact-message-wrapper">
@@ -46,12 +39,9 @@
             </div>
         }
 
-
     </div>
 
-
     <div class="chat-user-message-wrapper">
-        <!-- Área onde o usuário digita as mensagens -->
 
         <span class="material-icons" id="emoji" onclick="emojiWindow()">
             sentiment_satisfied_alt
@@ -73,7 +63,6 @@
             send
         </span>
         <div class="emojis-wrapper" id="emojis-wrapper">
-            <!-- Emojis container -->
 
             <ul class="emoji-list">
 
@@ -91,6 +80,11 @@
             </ul>
         </div>
 
+    </div>
+
+    <div>
+        Son operasyon : 
+        Tamamlanma Süresi : 
     </div>
 
 
@@ -116,16 +110,18 @@
     private void GetMessage(MessageModel message)
     {
         _Messages.Add(message);
+        InvokeAsync(StateHasChanged);
     }
 
     private void SendMessage(string message)
     {
+        if (string.IsNullOrEmpty(message))
+            return;
+
         MessageModel messageModel = new MessageModel();
         messageModel.Sended = LoginService.User;
         messageModel.Message = message;
 
-        _Messages.Add(messageModel);
-        StateHasChanged();
         ChatService.SendMessage(messageModel);
         _Message = string.Empty;
     }
