@@ -92,16 +92,16 @@
         InvokeAsync(StateHasChanged);
     }
 
-    private void SendMessage(string message)
+    private async Task SendMessage(string message)
     {
         if (string.IsNullOrEmpty(message))
             return;
 
         MessageModel messageModel = new MessageModel();
-        messageModel.Sended = LoginService.User;
+        messageModel.Sender = LoginService.User;
         messageModel.Message = message;
 
-        ChatService.SendMessage(messageModel);
+        await ChatService.SendMessage(messageModel);
         _Message = string.Empty;
     }
 

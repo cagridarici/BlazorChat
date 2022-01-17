@@ -7,7 +7,7 @@ namespace BlazorApp.Services
 {
     public class MessageModel
     {
-        public User Sended { get; set; }
+        public User Sender { get; set; }
         public string Message { get; set; }
     }
 }
