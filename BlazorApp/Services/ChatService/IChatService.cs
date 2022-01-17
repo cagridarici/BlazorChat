@@ -7,16 +7,12 @@ namespace BlazorApp.Services
 {
     public interface IChatService : IService
     {
-        //public event UserEventHandler OnConnectedUser;
-        //public event UserEventHandler OnDisconnectedUser;
-
         public event MessageEventHandler OnGetMessageEventHandler;
-
         public event EmptyEventHander OnStatesChanged;
 
-        List<User> ChatUsers { get; }
-        Task GetChatUsers();
-        void LoadChatUsers(List<User> chatUsers);
+        List<User> OnlineUsers { get; }
+
         Task SendMessage(MessageModel message);
+        Task GetOnlineUsers();
     }
 }

@@ -5,7 +5,7 @@
 
 <div class="background-wrapper" id="main">
 
-    <OnlineUsers ChatUsers="this.ChatUsers" />
+    <OnlineUsers ChatUsers="this.OnlineUsers" />
 
     <ChatPanel />
 
@@ -15,7 +15,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        await ChatService.GetChatUsers();
+        await ChatService.GetOnlineUsers();
         ChatService.OnStatesChanged += UpdateState;
     }
 
@@ -34,11 +34,11 @@
         UpdateState();
     }
 
-    public List<User> ChatUsers
+    public List<User> OnlineUsers
     {
         get
         {
-            return ChatService.ChatUsers;
+            return ChatService.OnlineUsers;
         }
     }
 

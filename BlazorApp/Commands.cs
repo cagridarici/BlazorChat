@@ -7,11 +7,11 @@ namespace BlazorApp
 {
     public class ClientCommands
     {
-        public const string GET_CONNECTION_ID = "COMMAND_GET_CONNECTION_ID";
-        public const string GET_ONLINE_USERS = "COMMAND_SEND_ONLINE_USERS";
-        public const string GET_LOGGED_USER = "COMMAND_GET_LOGGED_USER";
-        public const string GET_CHANGED_USER_STATUS = "COMMAND_GET_CHANGED_USER_STATUS";
-        public const string GET_MESSAGE = "COMMAND_GET_MESSAGE";
+        public const string RECEIVE_CONNECTION_ID = "COMMAND_RECEIVE_CONNECTION_ID";
+        public const string RECEIVE_ONLINE_USERS = "COMMAND_RECEIVE_ONLINE_USERS";
+        public const string RECEIVE_LOGGED_USER = "COMMAND_RECEIVE_LOGGED_USER";
+        public const string RECEIVE_CHANGED_USER_STATUS = "COMMAND_RECEIVE_CHANGED_USER_STATUS";
+        public const string RECEIVE_MESSAGE = "COMMAND_RECEIVE_MESSAGE";
     }
 
     public class HubCommands

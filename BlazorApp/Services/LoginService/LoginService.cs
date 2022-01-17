@@ -12,15 +12,13 @@ namespace BlazorApp.Services
     {
         public event UserEventHandler OnConnectedUser = null;
         public event UserEventHandler OnDisconnectedUser = null;
-        public event UserEventHandler OnUserChangedStatus = null; 
-
-        HubService _HubService = null;
+        public event UserEventHandler OnUserChangedStatus = null;
+        IHubService _HubService = null;
 
         public LoginService()
         {
-            _HubService = ServiceContainer.Instance.GetServiceInstance(typeof(IHubService)) as HubService;
-            
-            RegisterMethods();
+            _HubService = ServiceContainer.Instance.GetServiceInstance(typeof(IHubService)) as IHubService;
+            SubscribeHubMethods();
         }
 
         public async Task Login(LoginModel model, string hubUrl)
@@ -43,10 +41,7 @@ namespace BlazorApp.Services
 
                     User.ConnectionId = _HubService.GetConnectionId();
 
-                    if (OnConnectedUser != null)
-                    {
-                        OnConnectedUser(new UserEventArgs(User));
-                    }
+                    ConnectedUser();
                 }
                 else
                 {
@@ -56,7 +51,7 @@ namespace BlazorApp.Services
             }
             catch (Exception e)
             {
-
+                throw new Exception(e.Message);
             }
         }
 
@@ -69,15 +64,7 @@ namespace BlazorApp.Services
         {
             User.UserStatus = newStatus;
             await _HubService.InvokeAsync(HubCommands.CHANGE_USER_STATUS, User);
-            if (OnUserChangedStatus != null)
-            {
-                OnUserChangedStatus(new UserEventArgs(User)); // User'ın statüsü değiştiği için ChatUser listesindeki User'ı güncelle.
-            }
-        }
-
-        public void RegisterMethods()
-        {
-
+            ChangedUserStatus();
         }
 
         public void GetChangedUser(User user)
@@ -85,6 +72,28 @@ namespace BlazorApp.Services
 
         }
 
+        private void ConnectedUser()
+        {
+            if (OnConnectedUser != null)
+            {
+                OnConnectedUser(new UserEventArgs(User));
+            }
+        }
+
+        protected override void SubscribeHubMethods()
+        {
+            if (!_HubService.IsConnected)
+                return;
+            base.SubscribeHubMethods();
+        }
+
+        private void ChangedUserStatus()
+        {
+            if (OnUserChangedStatus != null)
+            {
+                OnUserChangedStatus(new UserEventArgs(User)); // User'ın statüsü değiştiği için ChatUser listesindeki User'ı güncelle.
+            }
+        }
 
         public User User
         {

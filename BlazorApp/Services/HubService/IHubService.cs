@@ -13,6 +13,10 @@ namespace BlazorApp.Services
         Task ConnectHub(string hubUrl);
         Task DisconnectHub();
         Task InvokeAsync(string commandName, object obj);
+        Task InvokeAsync(string commandName);
         HubConnection HubConnection { get; }
+        bool IsConnected { get; }
+        string GetConnectionId();
+        void SubscribeCustomHubMethod<Tobj>(string commandName, Action<Tobj> method);
     }
 }

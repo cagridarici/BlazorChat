@@ -5,8 +5,26 @@ using System.Threading.Tasks;
 
 namespace BlazorApp.Services
 {
-    public abstract class ServiceBase
+    public abstract class ServiceBase : IDisposable
     {
-        
+        public ServiceBase()
+        {
+
+        }
+
+        protected virtual void SubscribeHubMethods()
+        {
+
+        }
+
+        protected virtual void UnsubscribeHubMethods()
+        {
+
+        }
+
+        public void Dispose()
+        {
+            UnsubscribeHubMethods();
+        }
     }
 }

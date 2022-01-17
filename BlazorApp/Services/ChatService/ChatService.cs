@@ -10,36 +10,72 @@ namespace BlazorApp.Services
         public event EmptyEventHander OnStatesChanged = null;
         public event MessageEventHandler OnGetMessageEventHandler = null;
 
-        List<User> _ChatUsers = null;
-        HubService _HubService = null;
-        bool _IsRegisterHubMethods = false;
+        List<User> _OnlineUsers = null;
+        IHubService _HubService = null;
 
         public ChatService()
         {
-            _ChatUsers = new List<User>();
-            _HubService = ServiceContainer.Instance.GetServiceInstance(typeof(IHubService)) as HubService;
+            _OnlineUsers = new List<User>();
+            _HubService = ServiceContainer.Instance.GetServiceInstance(typeof(IHubService)) as IHubService;
+            SubscribeHubMethods();
         }
 
-        public void OnConnectedUser(UserEventArgs e)
+        protected override void SubscribeHubMethods()
         {
-            _ChatUsers.Add(e.GetUser);
-        }
-
-        private void RegisterHubMethods()
-        {
-            if (_IsRegisterHubMethods)
+            if (!_HubService.IsConnected)
                 return;
-
-            _HubService.RegisterCustomHubMethod<List<User>>(ClientCommands.GET_ONLINE_USERS, LoadChatUsers);
-            _HubService.RegisterCustomHubMethod<User>(ClientCommands.GET_LOGGED_USER, CommandGetOnConnectedUser);
-            _HubService.RegisterCustomHubMethod<MessageModel>(ClientCommands.GET_MESSAGE, GetMessage);
-            _HubService.RegisterCustomHubMethod<User>(ClientCommands.GET_CHANGED_USER_STATUS, GetChangedUser);
-            _IsRegisterHubMethods = true;
+            _HubService.SubscribeCustomHubMethod<List<User>>(ClientCommands.RECEIVE_ONLINE_USERS, ReceiveOnlineUsers);
+            _HubService.SubscribeCustomHubMethod<User>(ClientCommands.RECEIVE_LOGGED_USER, ReceiveLoggedUser);
+            _HubService.SubscribeCustomHubMethod<MessageModel>(ClientCommands.RECEIVE_MESSAGE, ReceiveMessage);
+            _HubService.SubscribeCustomHubMethod<User>(ClientCommands.RECEIVE_CHANGED_USER_STATUS, ReceiveChangedUser);
         }
 
-        public void GetChangedUser(User user)
+        public async Task GetOnlineUsers()
         {
-            var userItem = ChatUsers.Where(x => x.ConnectionId == user.ConnectionId).FirstOrDefault();
+            await _HubService.InvokeAsync(HubCommands.SEND_ONLINE_USERS);
+        }
+
+        public async Task SendMessage(MessageModel model)
+        {
+            await _HubService.InvokeAsync(HubCommands.SEND_MESSAGE, model);
+        }
+
+
+        #region Receive Methods
+
+        /// <summary>
+        /// The values ​​of these methods are loaded by Signal R.
+        /// </summary>
+
+        private void ReceiveMessage(MessageModel message)
+        {
+            if (OnGetMessageEventHandler != null)
+            {
+                OnGetMessageEventHandler(message);
+            }
+        }
+ 
+        private void ReceiveOnlineUsers(List<User> onlineUsers)
+        {
+            _OnlineUsers = onlineUsers;
+            if (OnStatesChanged != null)
+            {
+                OnStatesChanged();
+            }
+        }
+
+        private void ReceiveLoggedUser(User user)
+        {
+            _OnlineUsers.Add(user);
+            if (OnStatesChanged != null)
+            {
+                OnStatesChanged();
+            }
+        }
+
+        private void ReceiveChangedUser(User user)
+        {
+            var userItem = _OnlineUsers.Where(x => x.ConnectionId == user.ConnectionId).FirstOrDefault();
             if (userItem == null)
                 return;
             userItem.UserStatus = user.UserStatus;
@@ -49,49 +85,13 @@ namespace BlazorApp.Services
             }
         }
 
-        public async Task GetChatUsers()
-        {
-            RegisterHubMethods();
-            await _HubService.InvokeAsync(HubCommands.SEND_ONLINE_USERS);
-        }
+        #endregion
 
-        public void GetMessage(MessageModel message)
-        {
-            if (OnGetMessageEventHandler != null)
-            {
-                OnGetMessageEventHandler(message);
-            }
-        }
-
-        public async Task SendMessage(MessageModel model)
-        {
-            RegisterHubMethods();
-            await _HubService.InvokeAsync(HubCommands.SEND_MESSAGE, model);
-        }
-
-        public void LoadChatUsers(List<User> chatUsers)
-        {
-            _ChatUsers = chatUsers;
-            if (OnStatesChanged != null)
-            {
-                OnStatesChanged();
-            }
-        }
-
-        public void CommandGetOnConnectedUser(User user)
-        {
-            _ChatUsers.Add(user);
-            if (OnStatesChanged != null)
-            {
-                OnStatesChanged();
-            }
-        }
-
-        public List<User> ChatUsers
+        public List<User> OnlineUsers
         {
             get
             {
-                return _ChatUsers;
+                return _OnlineUsers;
             }
         }
     }

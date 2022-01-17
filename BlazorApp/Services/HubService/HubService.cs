@@ -29,7 +29,7 @@ namespace BlazorApp.Services
                 _HubConnection = new HubConnectionBuilder().WithUrl(hubUrl).Build();
                 await _HubConnection.StartAsync();
                 _IsConnected = true;
-                RegisterDefaultHubMethods();
+                SubscribeHubMethods();
             }
             catch (Exception e)
             {
@@ -53,14 +53,14 @@ namespace BlazorApp.Services
             await _HubConnection.InvokeAsync(commandName);
         }
 
-        private void RegisterDefaultHubMethods()
+        protected override void SubscribeHubMethods()
         {
             if (!IsConnected)
                 throw new Exception("Hub Servisi SignalR Hub'ına Bağlı Değil ! ");
-            _HubConnection.On<string>(ClientCommands.GET_CONNECTION_ID, this.GetConnectionId);
+            _HubConnection.On<string>(ClientCommands.RECEIVE_CONNECTION_ID, this.GetConnectionId);
         }
 
-        public void RegisterCustomHubMethod<Tobj>(string commandName, Action<Tobj> method)
+        public void SubscribeCustomHubMethod<Tobj>(string commandName, Action<Tobj> method)
         {
             if (!IsConnected)
                 throw new Exception("Hub Servisi SignalR Hub'ına Bağlı Değil ! ");

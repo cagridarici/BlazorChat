@@ -29,20 +29,20 @@ namespace BlazorApp
             user.ConnectionId = this.Context.ConnectionId;
             user.IsConnect = true;
             _OnlineUsers.Add(user);
-            Clients.Caller.SendAsync(ClientCommands.GET_CONNECTION_ID, this.Context.ConnectionId);
+            Clients.Caller.SendAsync(ClientCommands.RECEIVE_CONNECTION_ID, this.Context.ConnectionId);
             SendConnectedUser(user);
         }
 
         [HubMethodName(HubCommands.SEND_ONLINE_USERS)]
         public void SendOnlineUsers()
         {
-            Clients.Caller.SendAsync(ClientCommands.GET_ONLINE_USERS, _OnlineUsers);
+            Clients.Caller.SendAsync(ClientCommands.RECEIVE_ONLINE_USERS, _OnlineUsers);
         }
 
         [HubMethodName(HubCommands.SEND_MESSAGE)]
         public void SendMessage(MessageModel model)
         {
-            Clients.All.SendAsync(ClientCommands.GET_MESSAGE, model);
+            Clients.All.SendAsync(ClientCommands.RECEIVE_MESSAGE, model);
         }
 
         [HubMethodName(HubCommands.CHANGE_USER_STATUS)]
@@ -52,12 +52,12 @@ namespace BlazorApp
             if (changeItem == null)
                 return;
             changeItem.UserStatus = user.UserStatus;
-            Clients.All.SendAsync(ClientCommands.GET_CHANGED_USER_STATUS, changeItem);
+            Clients.All.SendAsync(ClientCommands.RECEIVE_CHANGED_USER_STATUS, changeItem);
         }
 
         private void SendConnectedUser(User user)
         {
-            Clients.All.SendAsync(ClientCommands.GET_LOGGED_USER, user);
+            Clients.All.SendAsync(ClientCommands.RECEIVE_LOGGED_USER, user);
         }
     }
 }
