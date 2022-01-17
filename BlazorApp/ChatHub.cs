@@ -33,8 +33,8 @@ namespace BlazorApp
             SendConnectedUser(user);
         }
 
-        [HubMethodName(HubCommands.SEND_ONLINE_USERS)]
-        public void SendOnlineUsers()
+        [HubMethodName(HubCommands.GET_ONLINE_USERS)]
+        public void GetOnlineUsers()
         {
             Clients.Caller.SendAsync(ClientCommands.RECEIVE_ONLINE_USERS, _OnlineUsers);
         }

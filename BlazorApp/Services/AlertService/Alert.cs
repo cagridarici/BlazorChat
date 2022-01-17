@@ -69,6 +69,25 @@ namespace BlazorApp.Services
             get { return _FadeEffect; }
             set { _FadeEffect = value; }
         }
+
+        public string GetTypeText()
+        {
+            switch (Type)
+            {
+                case AlertType.None:
+                    return string.Empty;
+                case AlertType.Success:
+                    return "Başarılı";
+                case AlertType.Danger:
+                    return "Dikkat";
+                case AlertType.Info:
+                    return "Bilgi";
+                case AlertType.Warning:
+                    return "Uyarı";
+                default:
+                    return string.Empty;
+            }
+        }
     }
 
     public enum AlertType

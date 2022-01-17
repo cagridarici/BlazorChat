@@ -22,7 +22,7 @@ namespace BlazorApp
         public const string CONNECT_HUB = "COMMAND_CONNECT_HUB";
         public const string CONNECT_CLIENT = "COMMAND_CONNECT_CLIENT";
         public const string SEND_MESSAGE = "COMMAND_SEND_MESSAGE";
-        public const string SEND_ONLINE_USERS = "COMMAND_SEND_ONLINE_USERS";
+        public const string GET_ONLINE_USERS = "COMMAND_GET_ONLINE_USERS";
         public const string DISCONNECT_CLIENT = "COMMAND_DISCONNECT_CLIENT";
         public const string CHANGE_USER_STATUS = "COMMAND_CHANGE_USER_STATUS";
     }

@@ -5,7 +5,7 @@
 {
     <div class="alert alert-dismissible alert-@alert.GetClassName mt-4 container @GetFadeEffect(alert)" role="alert">
         <a class="close" @onclick="@(() => RemoveAlert(alert))">&times;</a>
-        <strong>@GetTypeName(alert.Type)</strong>
+        <strong>@alert.GetTypeText()</strong>
         <span>
             @alert.Message
         </span>
@@ -55,25 +55,6 @@
         if (alert.FadeEffect)
             return "fade";
         return string.Empty;
-    }
-
-    private string GetTypeName(AlertType type)
-    {
-        switch (type)
-        {
-            case AlertType.None:
-                return string.Empty;
-            case AlertType.Success:
-                return "Başarılı";
-            case AlertType.Danger:
-                return "Dikkat";
-            case AlertType.Info:
-                return "Bilgi";
-            case AlertType.Warning:
-                return "Uyarı";
-            default:
-                return string.Empty;
-        }
     }
 
     public void Dispose()

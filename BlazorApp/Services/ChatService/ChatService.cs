@@ -32,7 +32,7 @@ namespace BlazorApp.Services
 
         public async Task GetOnlineUsers()
         {
-            await _HubService.InvokeAsync(HubCommands.SEND_ONLINE_USERS);
+            await _HubService.InvokeAsync(HubCommands.GET_ONLINE_USERS);
         }
 
         public async Task SendMessage(MessageModel model)
