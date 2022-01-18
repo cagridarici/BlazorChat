@@ -11,16 +11,11 @@ namespace BlazorApp
     {
         public const string HUB_URL = "/ChatHub";
 
-        List<User> _OnlineUsers = null;
+        static List<User> _OnlineUsers = new List<User>();
 
-        public ChatHub()
+        static ChatHub()
         {
-            _OnlineUsers = new List<User>();
-        }
 
-        public override Task OnConnectedAsync()
-        {
-            return base.OnConnectedAsync();
         }
 
         [HubMethodName(HubCommands.CONNECT_CLIENT)]
