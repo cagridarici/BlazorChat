@@ -11,11 +11,11 @@ namespace BlazorApp
     {
         public const string HUB_URL = "/ChatHub";
 
-        static List<User> _OnlineUsers = new List<User>();
+        static List<User> _OnlineUsers = null;
 
         static ChatHub()
         {
-
+            _OnlineUsers = new List<User>();
         }
 
         [HubMethodName(HubCommands.CONNECT_CLIENT)]

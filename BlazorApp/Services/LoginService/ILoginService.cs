@@ -10,8 +10,12 @@ namespace BlazorApp.Services
 {
     public interface ILoginService : IService
     {
+        event UserEventHandler UserConnected;
+        event UserEventHandler UserDisconnected;
+        event UserEventHandler UserStatusChanged;
+
         Task Login(LoginModel user, string hubUrl);
-        void LogOut();
+        Task LogOut();
         Task ChangeStatus(UserStatus status);
         User User { get; }
     }

@@ -22,6 +22,30 @@ namespace BlazorApp.Services
 
         }
 
+        protected void InvokeAsyncAction(Action<Task> action)
+        {
+            try
+            {
+
+            }
+            catch (Exception e)
+            {
+
+            }
+        }
+
+        protected virtual void InvokeAction(Action action)
+        {
+            try
+            {
+                action();
+            }
+            catch (Exception e)
+            {
+
+            }
+        }
+
         public void Dispose()
         {
             UnsubscribeHubMethods();

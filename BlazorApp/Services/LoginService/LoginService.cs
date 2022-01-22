@@ -10,9 +10,10 @@ namespace BlazorApp.Services
     [Guid("D1641FE3-0AE6-41D1-BECA-9239FB4B01ED")]
     public class LoginService : ServiceBase, ILoginService
     {
-        public event UserEventHandler OnConnectedUser = null;
-        public event UserEventHandler OnDisconnectedUser = null;
-        public event UserEventHandler OnUserChangedStatus = null;
+        public event UserEventHandler UserConnected = null;
+        public event UserEventHandler UserDisconnected = null;
+        public event UserEventHandler UserStatusChanged = null;
+
         IHubService _HubService = null;
 
         public LoginService()
@@ -41,7 +42,7 @@ namespace BlazorApp.Services
 
                     User.ConnectionId = _HubService.GetConnectionId();
 
-                    ConnectedUser();
+                    OnUserConnected();
                 }
                 else
                 {
@@ -55,16 +56,25 @@ namespace BlazorApp.Services
             }
         }
 
-        public void LogOut()
+        public async Task LogOut()
         {
-
+            try
+            {
+                await _HubService.DisconnectHub();
+                User = null;
+                OnUserDisconnected();
+            }
+            catch (Exception e)
+            {
+                
+            }
         }
 
         public async Task ChangeStatus(UserStatus newStatus)
         {
             User.UserStatus = newStatus;
             await _HubService.InvokeAsync(HubCommands.CHANGE_USER_STATUS, User);
-            ChangedUserStatus();
+            OnUserStatusChanged();
         }
 
         public void GetChangedUser(User user)
@@ -72,11 +82,19 @@ namespace BlazorApp.Services
 
         }
 
-        private void ConnectedUser()
+        private void OnUserDisconnected()
         {
-            if (OnConnectedUser != null)
+            if (UserDisconnected != null)
             {
-                OnConnectedUser(new UserEventArgs(User));
+                UserDisconnected(new UserEventArgs(User));
+            }
+        }
+
+        private void OnUserConnected()
+        {
+            if (UserConnected != null)
+            {
+                UserConnected(new UserEventArgs(User));
             }
         }
 
@@ -87,11 +105,11 @@ namespace BlazorApp.Services
             base.SubscribeHubMethods();
         }
 
-        private void ChangedUserStatus()
+        private void OnUserStatusChanged()
         {
-            if (OnUserChangedStatus != null)
+            if (UserStatusChanged != null)
             {
-                OnUserChangedStatus(new UserEventArgs(User)); // User'ın statüsü değiştiği için ChatUser listesindeki User'ı güncelle.
+                UserStatusChanged(new UserEventArgs(User)); // User'ın statüsü değiştiği için ChatUser listesindeki User'ı güncelle.
             }
         }
 

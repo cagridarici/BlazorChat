@@ -18,8 +18,8 @@
             <span class="material-icons" @onclick="() => UnusedFunction()" id="video-call">
                 videocam
             </span>
-            <span class="material-icons" @onclick="() => UnusedFunction()" id="chat-contact-messages-options">
-                more_vert
+            <span class="material-icons" @onclick="() => DisconnectServer()" id="chat-logout">
+                close
             </span>
         </div>
     </div>
@@ -105,6 +105,20 @@
         _Message = string.Empty;
     }
 
+    private async Task DisconnectServer()
+    {
+        try
+        {
+            await LoginService.LogOut();
+            NavigationManager.NavigateTo("/login", false);
+            AlertService.ShowSuccessAlert("Sistemden Çıkış Yaptınız...");
+        }
+        catch (Exception e)
+        {
+            AlertService.ShowErrorAlert("Sistemden Çıkış Yapamadınız...");
+        }
+    }
+
     [Inject]
     IAlertService AlertService { get; set; }
 
@@ -113,4 +127,7 @@
 
     [Inject]
     ILoginService LoginService { get; set; }
+
+    [Inject]
+    NavigationManager NavigationManager { get; set; }
 }

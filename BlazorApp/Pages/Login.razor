@@ -1,5 +1,5 @@
 ﻿@page "/"
-
+@page "/login"
 
 <div class="get-started" id="login-screen">
     <p>
@@ -31,6 +31,13 @@
                 <InputText @bind-Value="@loginModel.Surname" class="login-form" placeholder="Surname" />
                 <ValidationMessage For="@(() => loginModel.Surname)" />
 
+                @*<div class="login-form m-auto">
+                        <InputFile type="file" OnChange="OnInputFileChange" />
+                        <div class="mt-2"> </div>
+                        <img src="@imgUrl" width="60" height="60" />
+                    </div>*@
+
+
                 <button class="login-btn">
                     Login
                 </button>
@@ -38,12 +45,17 @@
             </EditForm>
         }
     }
-    <AlertBox />
 </div>
 
 
 @code{
+
     LoginModel loginModel = new LoginModel();
+
+    protected override void OnInitialized()
+    {
+        LoginService.UserConnected += OnUserConnected;
+    }
 
     private async Task ConnectServer()
     {
@@ -56,15 +68,24 @@
             await LoginService.Login(loginModel, hubUrl);
 
             ShowConnectingText = false;
-            StateHasChanged();
 
-            NavigationManager.NavigateTo("/chat");
         }
         catch (Exception e)
         {
             AlertService.ShowErrorAlert(e.Message);
             StateHasChanged();
         }
+    }
+
+    private void OnInputFileChange(InputFileChangeEventArgs e)
+    {
+
+    }
+
+    private void OnUserConnected(UserEventArgs e)
+    {
+        AlertService.ShowSuccessAlert("Sayın: " + e.GetUser.FullName + " Sisteme giriş yaptınız!");
+        NavigationManager.NavigateTo("/chat", false);
     }
 
     private void ConnectTestServer()
