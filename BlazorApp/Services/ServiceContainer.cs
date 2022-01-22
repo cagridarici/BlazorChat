@@ -8,6 +8,7 @@ namespace BlazorApp.Services
     {
         Hashtable _Services = null;
         static ServiceContainer _Instance = null;
+        static object _Lock = new object();
 
         public ServiceContainer()
         {
@@ -39,8 +40,11 @@ namespace BlazorApp.Services
         {
             get
             {
-                if (_Instance == null)
-                    _Instance = new ServiceContainer();
+                lock (_Lock)
+                {
+                    if (_Instance == null)
+                        _Instance = new ServiceContainer();
+                }
                 return _Instance;
             }
         }

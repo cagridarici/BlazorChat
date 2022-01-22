@@ -8,7 +8,7 @@ namespace BlazorApp.Services
     public class ChatService : ServiceBase, IChatService
     {
         public event EmptyEventHander OnStatesChanged = null;
-        public event MessageEventHandler OnGetMessageEventHandler = null;
+        public event MessageEventHandler GetMessage = null;
 
         List<User> _OnlineUsers = null;
         IHubService _HubService = null;
@@ -25,7 +25,8 @@ namespace BlazorApp.Services
             if (!_HubService.IsConnected)
                 return;
             _HubService.SubscribeCustomHubMethod<List<User>>(ClientCommands.RECEIVE_ONLINE_USERS, ReceiveOnlineUsers);
-            _HubService.SubscribeCustomHubMethod<User>(ClientCommands.RECEIVE_LOGGED_USER, ReceiveLoggedUser);
+            _HubService.SubscribeCustomHubMethod<User>(ClientCommands.RECEIVE_CONNECTED_USER, ReceiveConnectedUser);
+            _HubService.SubscribeCustomHubMethod<User>(ClientCommands.RECEIVE_DISCONNECTED_USER, ReceiveDisconnectedUser);
             _HubService.SubscribeCustomHubMethod<MessageModel>(ClientCommands.RECEIVE_MESSAGE, ReceiveMessage);
             _HubService.SubscribeCustomHubMethod<User>(ClientCommands.RECEIVE_CHANGED_USER_STATUS, ReceiveChangedUser);
         }
@@ -40,7 +41,6 @@ namespace BlazorApp.Services
             await _HubService.InvokeAsync(HubCommands.SEND_MESSAGE, model);
         }
 
-
         #region Receive Methods
 
         /// <summary>
@@ -49,12 +49,12 @@ namespace BlazorApp.Services
 
         private void ReceiveMessage(MessageModel message)
         {
-            if (OnGetMessageEventHandler != null)
+            if (GetMessage != null)
             {
-                OnGetMessageEventHandler(message);
+                GetMessage(message);
             }
         }
- 
+
         private void ReceiveOnlineUsers(List<User> onlineUsers)
         {
             _OnlineUsers = onlineUsers;
@@ -64,12 +64,25 @@ namespace BlazorApp.Services
             }
         }
 
-        private void ReceiveLoggedUser(User user)
+        private void ReceiveConnectedUser(User user)
         {
             _OnlineUsers.Add(user);
             if (OnStatesChanged != null)
             {
                 OnStatesChanged();
+            }
+        }
+
+        private void ReceiveDisconnectedUser(User user)
+        {
+            User discUser = _OnlineUsers.Where(i => i.ConnectionId == user.ConnectionId).FirstOrDefault();
+            if (discUser != null)
+            {
+                _OnlineUsers.Remove(discUser);
+                if (OnStatesChanged != null)
+                {
+                    OnStatesChanged();
+                }
             }
         }
 

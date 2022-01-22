@@ -10,7 +10,7 @@ namespace BlazorApp.Services
     [Guid("D1641FE3-0AE6-41D1-BECA-9239FB4B01ED")]
     public class LoginService : ServiceBase, ILoginService
     {
-        public event UserEventHandler UserConnected = null;
+        public event UserEventHandler UserConnected  = null;
         public event UserEventHandler UserDisconnected = null;
         public event UserEventHandler UserStatusChanged = null;
 
@@ -38,8 +38,8 @@ namespace BlazorApp.Services
                     User.IsConnect = true;
 
                     await _HubService.InvokeAsync(HubCommands.CONNECT_CLIENT, User);
-                    User.IsConnect = true;
 
+                    User.IsConnect = true;
                     User.ConnectionId = _HubService.GetConnectionId();
 
                     OnUserConnected();
@@ -60,6 +60,7 @@ namespace BlazorApp.Services
         {
             try
             {
+                await _HubService.InvokeAsync(HubCommands.DISCONNECT_CLIENT, User);
                 await _HubService.DisconnectHub();
                 User = null;
                 OnUserDisconnected();
@@ -117,6 +118,15 @@ namespace BlazorApp.Services
         {
             get;
             private set;
+        }
+
+        public async override void Dispose()
+        {
+            base.Dispose();
+            if (User != null)
+            {
+                await LogOut();
+            }
         }
     }
 }

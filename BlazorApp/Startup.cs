@@ -26,8 +26,7 @@ namespace BlazorApp
             services.AddRazorPages();
             services.AddServerSideBlazor();
 
-            services.AddSingleton<IHubService, HubService>();
-
+            services.AddScoped<IHubService, HubService>();
             services.AddScoped<IAlertService, AlertService>();
             services.AddScoped<ILoginService, LoginService>();
             services.AddScoped<IChatService, ChatService>();

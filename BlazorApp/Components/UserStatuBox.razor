@@ -19,21 +19,21 @@
 
     <p class="user-profile-name" id="user-name">
 
-        Hoş geldiniz : @LoggedUser.FullName
+        Hoş geldiniz : @LoginService.User.FullName
 
     </p>
     <p class="user-connection">
 
         @{
-            string toggleStatus = LoggedUser.UserStatus == UserStatus.Online ? TOGGLE_ON : TOGGLE_OFF;
-            string color = LoggedUser.UserStatus == UserStatus.Online ? "green" : "gray";
+            string toggleStatus = LoginService.User.UserStatus == UserStatus.Online ? TOGGLE_ON : TOGGLE_OFF;
+            string color = LoginService.User.UserStatus == UserStatus.Online ? "green" : "gray";
 
             <span class="material-icons" id="user-connection-icon" style="color:@color" @onclick="() => ChangeUserStatus(toggleStatus)">
                 @toggleStatus
             </span>
 
             <span id="user-profile-name">
-                @LoggedUser.UserStatus.ToString()
+                @LoginService.User.UserStatus.ToString()
             </span>
         }
 
@@ -61,15 +61,4 @@
 
     [Inject]
     ILoginService LoginService { get; set; }
-
-    private User LoggedUser
-    {
-        get
-        {
-            if (LoginService == null)
-                return null;
-            return LoginService.User;
-        }
-    }
-
 }

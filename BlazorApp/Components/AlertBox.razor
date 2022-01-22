@@ -35,19 +35,13 @@
 
     private async void RemoveAlert(Alert alert)
     {
-        int index = GetIndexFromList(alert);
-        if (index != -1)
+        if (alert != null)
         {
             alert.FadeEffect = true;
             await Task.Delay(500);
-            _Alerts.RemoveAt(index);
+            _Alerts.Remove(alert);
+            StateHasChanged();
         }
-        StateHasChanged();
-    }
-
-    private int GetIndexFromList(Alert alert)
-    {
-        return _Alerts.FindIndex(i => i.Id == alert.Id);
     }
 
     private string GetFadeEffect(Alert alert)

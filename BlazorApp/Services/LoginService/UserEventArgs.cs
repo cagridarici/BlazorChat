@@ -14,6 +14,9 @@ namespace BlazorApp.Services
             _User = user;
         }
 
-        public User GetUser { get { return _User; } }
+        public User User
+        {
+            get { return _User; }
+        }
     }
 }

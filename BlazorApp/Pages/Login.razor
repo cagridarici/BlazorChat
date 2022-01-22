@@ -84,7 +84,7 @@
 
     private void OnUserConnected(UserEventArgs e)
     {
-        AlertService.ShowSuccessAlert("Sayın: " + e.GetUser.FullName + " Sisteme giriş yaptınız!");
+        AlertService.ShowSuccessAlert("Sayın: " + e.User.FullName + " Sisteme giriş yaptınız!");
         NavigationManager.NavigateTo("/chat", false);
     }
 

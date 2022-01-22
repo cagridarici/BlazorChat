@@ -46,7 +46,7 @@ namespace BlazorApp.Services
             }
         }
 
-        public void Dispose()
+        public virtual void Dispose()
         {
             UnsubscribeHubMethods();
         }

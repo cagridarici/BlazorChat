@@ -9,7 +9,8 @@ namespace BlazorApp
     {
         public const string RECEIVE_CONNECTION_ID = "COMMAND_RECEIVE_CONNECTION_ID";
         public const string RECEIVE_ONLINE_USERS = "COMMAND_RECEIVE_ONLINE_USERS";
-        public const string RECEIVE_LOGGED_USER = "COMMAND_RECEIVE_LOGGED_USER";
+        public const string RECEIVE_CONNECTED_USER = "COMMAND_RECEIVE_CONNECTED_USER";
+        public const string RECEIVE_DISCONNECTED_USER = "COMMAND_RECEIVE_DISCONNECTED_USER";
         public const string RECEIVE_CHANGED_USER_STATUS = "COMMAND_RECEIVE_CHANGED_USER_STATUS";
         public const string RECEIVE_MESSAGE = "COMMAND_RECEIVE_MESSAGE";
     }

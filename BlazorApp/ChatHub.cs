@@ -28,6 +28,17 @@ namespace BlazorApp
             SendConnectedUser(user);
         }
 
+        [HubMethodName(HubCommands.DISCONNECT_CLIENT)]
+        public void DisconnectClient(User user)
+        {
+            User deletedUser = _OnlineUsers.Where(i => i.ConnectionId == user.ConnectionId).FirstOrDefault();
+            if (deletedUser != null)
+            {
+                _OnlineUsers.Remove(deletedUser);
+                SendDisconnectedUser(user);
+            }
+        }
+
         [HubMethodName(HubCommands.GET_ONLINE_USERS)]
         public void GetOnlineUsers()
         {
@@ -52,7 +63,12 @@ namespace BlazorApp
 
         private void SendConnectedUser(User user)
         {
-            Clients.All.SendAsync(ClientCommands.RECEIVE_LOGGED_USER, user);
+            Clients.All.SendAsync(ClientCommands.RECEIVE_CONNECTED_USER, user);
+        }
+
+        private void SendDisconnectedUser(User user)
+        {
+            Clients.All.SendAsync(ClientCommands.RECEIVE_DISCONNECTED_USER, user);
         }
     }
 }

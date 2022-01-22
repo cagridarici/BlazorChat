@@ -82,9 +82,9 @@ namespace BlazorApp.Services
 
         public async Task DisconnectHub()
         {
-            await _HubConnection.DisposeAsync();
-            _HubConnection = null;
-            _IsConnected = false;
+            //await _HubConnection.StopAsync();
+            //_IsConnected = false;
+            //_HubConnection = null;
         }
 
         public string GetConnectionId()
