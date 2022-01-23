@@ -135,6 +135,6 @@
 
     public void Dispose()
     {
-       ChatService.GetMessage += GetMessage;
+       ChatService.GetMessage -= GetMessage;
     }
 }
