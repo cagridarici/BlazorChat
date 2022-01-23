@@ -1,4 +1,6 @@
-﻿<main class="chat-main-wrapper">
+﻿@implements IDisposable
+
+<main class="chat-main-wrapper">
 
     <div class="chat-header">
 
@@ -130,4 +132,9 @@
 
     [Inject]
     NavigationManager NavigationManager { get; set; }
+
+    public void Dispose()
+    {
+       ChatService.GetMessage += GetMessage;
+    }
 }

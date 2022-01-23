@@ -1,5 +1,6 @@
 ﻿@page "/"
 @page "/login"
+@implements IDisposable
 
 <div class="get-started" id="login-screen">
     <p>
@@ -118,5 +119,10 @@
     {
         get;
         set;
+    }
+
+    public void Dispose()
+    {
+        LoginService.UserConnected -= OnUserConnected;
     }
 }

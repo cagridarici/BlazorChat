@@ -1,4 +1,6 @@
 ﻿@page "/Chat"
+@implements IDisposable
+
 
 <div class="background-wrapper" id="main">
 
@@ -8,7 +10,7 @@
 
 </div>
 
-@code{ 
+@code{
 
     protected override async Task OnInitializedAsync()
     {
@@ -41,4 +43,9 @@
 
     [Inject]
     IChatService ChatService { get; set; }
+
+    public void Dispose()
+    {
+        ChatService.OnStatesChanged -= UpdateState;
+    }
 }
