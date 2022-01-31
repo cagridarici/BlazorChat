@@ -80,12 +80,12 @@ namespace BlazorApp.Services
             }
         }
 
-        public async Task DisconnectHub()
-        {
-            //await _HubConnection.StopAsync();
-            //_IsConnected = false;
-            //_HubConnection = null;
-        }
+        //public async Task DisconnectHub()
+        //{
+        //    //await _HubConnection.StopAsync();
+        //    //_IsConnected = false;
+        //    //_HubConnection = null;
+        //}
 
         public string GetConnectionId()
         {

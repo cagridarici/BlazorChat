@@ -61,7 +61,7 @@ namespace BlazorApp.Services
             try
             {
                 await _HubService.InvokeAsync(HubCommands.DISCONNECT_CLIENT, User);
-                await _HubService.DisconnectHub();
+                //await _HubService.DisconnectHub();
                 User = null;
                 OnUserDisconnected();
             }

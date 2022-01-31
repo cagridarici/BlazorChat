@@ -8,12 +8,19 @@
 
 </div>
 
-@code{ 
+@code{
 
     protected override async Task OnInitializedAsync()
     {
-        await ChatService.GetOnlineUsers();
-        ChatService.OnStatesChanged += UpdateState;
+        if (!IsConnected)
+        {
+            NavigationManager.NavigateTo("/login", false);
+        }
+        else
+        {
+            await ChatService.GetOnlineUsers();
+            ChatService.OnStatesChanged += UpdateState;
+        }
     }
 
     public void UpdateState()
@@ -39,6 +46,27 @@
         }
     }
 
+    private bool IsConnected
+    {
+        get
+        {
+            if (LoginService.User == null)
+                return false;
+            else
+                return LoginService.User.IsConnect;
+        }
+    }
+
     [Inject]
     IChatService ChatService { get; set; }
+
+    [Inject]
+    ILoginService LoginService { get; set; }
+
+    [Inject]
+    IAlertService AlertService { get; set; }
+
+    [Inject]
+    NavigationManager NavigationManager { get; set; }
+
 }
