@@ -1,4 +1,6 @@
-﻿@page "/"
+﻿@implements IDisposable
+
+@page "/"
 @page "/login"
 
 <div class="get-started" id="login-screen">
@@ -54,7 +56,7 @@
 
     protected override void OnInitialized()
     {
-        LoginService.UserConnected += OnUserConnected;
+        LoginService.Connected += Connected;
     }
 
     private async Task ConnectServer()
@@ -82,7 +84,7 @@
 
     }
 
-    private void OnUserConnected(UserEventArgs e)
+    private void Connected(UserEventArgs e)
     {
         AlertService.ShowSuccessAlert("Sayın: " + e.User.FullName + " Sisteme giriş yaptınız!");
         NavigationManager.NavigateTo("/chat", false);
@@ -118,5 +120,10 @@
     {
         get;
         set;
+    }
+
+    public void Dispose()
+    {
+        LoginService.Connected -= Connected;
     }
 }

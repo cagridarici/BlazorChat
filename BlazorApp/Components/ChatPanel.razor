@@ -77,7 +77,7 @@
 
     protected override void OnInitialized()
     {
-        ChatService.GetMessage += GetMessage;
+        ChatService.MessageReceived += GetMessage;
         base.OnInitialized();
     }
 

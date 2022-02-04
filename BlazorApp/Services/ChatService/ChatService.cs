@@ -7,8 +7,11 @@ namespace BlazorApp.Services
 {
     public class ChatService : ServiceBase, IChatService
     {
-        public event EmptyEventHander OnStatesChanged = null;
-        public event MessageEventHandler GetMessage = null;
+        public event MessageEventHandler MessageReceived = null;
+        public event EmptyEventHander StatesChanged = null;
+
+        public event UserEventHandler UserDisconnected = null;
+        public event UserEventHandler UserConnected = null;
 
         List<User> _OnlineUsers = null;
         IHubService _HubService = null;
@@ -46,31 +49,23 @@ namespace BlazorApp.Services
         /// <summary>
         /// The values ​​of these methods are loaded by Signal R.
         /// </summary>
-
         private void ReceiveMessage(MessageModel message)
         {
-            if (GetMessage != null)
-            {
-                GetMessage(message);
-            }
+            if (MessageReceived != null)
+                MessageReceived(message);
         }
 
         private void ReceiveOnlineUsers(List<User> onlineUsers)
         {
             _OnlineUsers = onlineUsers;
-            if (OnStatesChanged != null)
-            {
-                OnStatesChanged();
-            }
+            ChangeStates();
         }
 
         private void ReceiveConnectedUser(User user)
         {
             _OnlineUsers.Add(user);
-            if (OnStatesChanged != null)
-            {
-                OnStatesChanged();
-            }
+            OnUserConnected(new UserEventArgs(user));
+            ChangeStates();
         }
 
         private void ReceiveDisconnectedUser(User user)
@@ -79,26 +74,35 @@ namespace BlazorApp.Services
             if (discUser != null)
             {
                 _OnlineUsers.Remove(discUser);
-                if (OnStatesChanged != null)
-                {
-                    OnStatesChanged();
-                }
+                OnUserDisconnected(new UserEventArgs(discUser));
+                ChangeStates();
             }
         }
 
         private void ReceiveChangedUser(User user)
         {
-            var userItem = _OnlineUsers.Where(x => x.ConnectionId == user.ConnectionId).FirstOrDefault();
-            if (userItem == null)
-                return;
-            userItem.UserStatus = user.UserStatus;
-            if (OnStatesChanged != null)
-            {
-                OnStatesChanged();
-            }
+           
         }
 
         #endregion
+
+        private void ChangeStates()
+        {
+            if (StatesChanged != null)
+                StatesChanged();
+        }
+
+        private void OnUserConnected(UserEventArgs e)
+        {
+            if (UserConnected != null)
+                UserConnected(e);
+        }
+
+        private void OnUserDisconnected(UserEventArgs e)
+        {
+            if (UserDisconnected != null)
+                UserDisconnected(e);
+        }
 
         public List<User> OnlineUsers
         {
@@ -107,5 +111,6 @@ namespace BlazorApp.Services
                 return _OnlineUsers;
             }
         }
+
     }
 }

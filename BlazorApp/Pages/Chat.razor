@@ -1,8 +1,9 @@
-﻿@page "/Chat"
+﻿@implements IDisposable
+@page "/Chat"
 
 <div class="background-wrapper" id="main">
 
-    <OnlineUsers ChatUsers="this.OnlineUsers" />
+    <OnlineUsers ChatUsers="ChatService.OnlineUsers" />
 
     <ChatPanel />
 
@@ -19,7 +20,9 @@
         else
         {
             await ChatService.GetOnlineUsers();
-            ChatService.OnStatesChanged += UpdateState;
+            ChatService.StatesChanged += UpdateState;
+            ChatService.UserConnected += UserConnected;
+            ChatService.UserDisconnected += UserDisconnected;
         }
     }
 
@@ -28,22 +31,14 @@
         InvokeAsync(StateHasChanged);
     }
 
-    public void OnConnectedUser(UserEventArgs e)
+    private void UserConnected(UserEventArgs e)
     {
-        UpdateState();
+        AlertService.ShowSuccessAlert(string.Format("{0} İsimli Kullanıcı Sunucuya Bağlandı...", e.User.FullName));
     }
 
-    public void OnDisconnectedUser(UserEventArgs e)
+    private void UserDisconnected(UserEventArgs e)
     {
-        UpdateState();
-    }
-
-    public List<User> OnlineUsers
-    {
-        get
-        {
-            return ChatService.OnlineUsers;
-        }
+        AlertService.ShowWarningAlert(string.Format("{0} İsimli Kullanıcı Sunucudan Ayrıldı...", e.User.FullName));
     }
 
     private bool IsConnected
@@ -69,4 +64,11 @@
     [Inject]
     NavigationManager NavigationManager { get; set; }
 
+
+    public void Dispose()
+    {
+        ChatService.StatesChanged -= UpdateState;
+        ChatService.UserConnected -= UserConnected;
+        ChatService.UserDisconnected -= UserDisconnected;
+    }
 }
